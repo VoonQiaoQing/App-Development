@@ -1,11 +1,28 @@
-from wtforms import Form, StringField, RadioField, SelectField, TextAreaField, validators
+from flask_wtf import Form
+from wtforms import Form, FileField, BooleanField, StringField, RadioField, SelectField, TextAreaField, validators
+from flask_wtf.file import FileField, FileRequired, FileAllowed
+from wtforms.validators import DataRequired, Email
 
-class CreateMoviesForm(Form):
-    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    gender = SelectField('Gender', [validators.DataRequired()], choices=[('', 'Select'), ('F', 'Female'), ('M', 'Male')], default='')
-    membership = RadioField('Membership', choices=[('F', 'Fellow'), ('S', 'Senior'), ('P', 'Professional')], default='F')
-    remarks = TextAreaField('Remarks', [validators.Optional()])
+class UpdateMoviesForm(Form):
+#    movie_title = TextAreaField('Movie Title', validators=[DataRequired()])
+    movie_name = TextAreaField('Movie Name', validators=[DataRequired()])
+#    movie_image = FileField('Movie Image', validators=[FileRequired(), FileAllowed(['jpg', 'png','webp','jfif'], 'Images only!')])
+    movieagerating = TextAreaField('Movie Rating', validators=[DataRequired()])
+    movieduration = TextAreaField('Movie Duration', validators=[DataRequired()])
+    gvexclusivetag = BooleanField('GV EXCLUSIVE?')
+    #choices  =['Horror','Drama','Comedy','Science','Romance','Animation','Crime Film','Thriller','Adventure','Emotional','Mystery','Action']
+    movieHorror = BooleanField('Horror')
+    movieDrama = BooleanField('Drama')
+    movieComedy = BooleanField('Comedy')
+    movieScience = BooleanField('Science')
+    movieRomance = BooleanField('Romance')
+    movieAnimation = BooleanField('Animation')
+    movieCrimeFilm = BooleanField('CrimeFilm')
+    movieThriller = BooleanField('Thriller')
+    movieAdventure = BooleanField('Adventure')
+    movieEmotional = BooleanField('Emotional')
+    movieMystery = BooleanField('Mystery')
+    movieAction = BooleanField('Action')
 
 #Form object – Used to create a WTForms Form.
 #StringField object – Used to create an HTML textfield.
@@ -13,3 +30,5 @@ class CreateMoviesForm(Form):
 #SelectField object – Used to create an HTML dropdown list.
 #TextAreaField object – Used to create an HTML textarea.
 #validators object – validators allow you to specify the constraints for each of the fields such as minimum and maximum length, DataRequried or Optional.
+
+
