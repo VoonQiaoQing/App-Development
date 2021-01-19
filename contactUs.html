@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}FAQ Page{% endblock %}\
+{% block content %}
+<h1 class="display-9">SERVICES</h1>
+
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#FAQ">FAQ</a>
+
+      <p class="nav-link dropdown-toggle" href="" id="navbardrop" data-toggle="dropdown">
+        How far in advance can i book my tickets?
+      </p>
+      <div class="dropdown-menu">
+        <p class="dropdown-item" href="#">You are able to book your tickets 5 days in advance </p>
+      </div>
+    <!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.collapsible {
+  background-color: black;
+  color: gold;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: indigo;
+}
+
+.content {
+  padding: 0 10px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color:black;
+  color:gold ;
+}
+</style>
+</head>
+<body>
+
+<h2>Services</h2>
+
+<h4>FAQ question board:</h4>
+<button class="collapsible">How far in advance can i book my tickets?</button>
+<div class="content">
+  <p>You can book your tickets 5 days in advance</p>
+</div>
+<button class="collapsible">How do i resend my quicktix or confirmaton email?</button>
+<div class="content">
+  <p>idk</p>
+</div>
+<button class="collapsible">Why cant i buy promotional tickets (e.g student discount , elderly discount)?</button>
+<div class="content">
+  <p>idk</p>
+</div>
+<button class="collapsible">I have a complimentary ticket. How do i use it</button>
+<div class="content">
+  <p>idk</p>
+
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
+  });
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane container active" id="FAQ"</div>
+
+
+</div>
+{% endblock %}

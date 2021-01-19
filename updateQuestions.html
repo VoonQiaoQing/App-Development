@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}
+Update Questions{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<h1 class="display-4">Update Questions</h1>
+
+<form method="POST" action="">
+  <div class="form-group">
+    {{ render_field(form.Question, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.Reason, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.Availability, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.NumberOfPeople, class="form-check", style="list-style-type:none") }}
+  </div>
+  <div id="prof">
+    <div class="form-group">
+      {{ render_field(form.remarks, class="form-control") }}
+    </div>
+  </div>
+  <input type="submit" value="Submit" class="btn btn-primary"/>
+</form>
+{% endblock %}

@@ -1,15 +1,8 @@
 from wtforms import Form, StringField, RadioField, SelectField, TextAreaField, validators
 
 class CreateUserForm(Form):
-    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    gender = SelectField('Gender', [validators.DataRequired()], choices=[('', 'Select'), ('F', 'Female'), ('M', 'Male')], default='')
-    membership = RadioField('Membership', choices=[('F', 'Fellow'), ('S', 'Senior'), ('P', 'Professional')], default='F')
+    Question = StringField('Question', [validators.Length(min=1, max=150), validators.DataRequired()])
+    Reason = StringField('Reason', [validators.Length(min=1, max=150), validators.DataRequired()])
+    Availability = SelectField('Does the Chatbot have the answer?', [validators.DataRequired()], choices=[('', 'Select'), ('Yes', 'Yes'), ('No', 'No')], default='')
+    NumberOfPeople= RadioField('Number of people who suggested this', choices=[('1', '1 to 10'), ('2', '11 to 20'), ('3', '21 to 30'),("4","Above 30 ")], default='1')
     remarks = TextAreaField('Remarks', [validators.Optional()])
-
-#Form object – Used to create a WTForms Form.
-#StringField object – Used to create an HTML textfield.
-#RadioField object – Used to create an HTML radio button group.
-#SelectField object – Used to create an HTML dropdown list.
-#TextAreaField object – Used to create an HTML textarea.
-#validators object – validators allow you to specify the constraints for each of the fields such as minimum and maximum length, DataRequried or Optional.

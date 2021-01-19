@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Retrieve Questions{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Retrieve Questions</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no questions.</p>
+  {% elif count == 1 %}
+  <p>There is 1 question.</p>
+  {% else %}
+  <p>There are {{ count }} questions.</p>
+  {% endif %}
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Question</th>
+        <th>Reason</th>
+        <th>Was it in the chatbot?</th>
+        <th>Age Group</th>
+        <th>Remarks</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for user in users_list %}
+      <tr>
+        <td>{{ user.get_user_id() }}</td>
+        <td>{{ user.get_Question() }}</td>
+        <td>{{ user.get_Reason() }}</td>
+        <td>{{ user.get_Availability() }}</td>
+        {% if user.get_NumberOfPeople() == "1" %}
+        <td>10 to 15</td>
+        {% elif user.get_NumberOfPeople() == "2" %}
+        <td>16 to 25</td>
+        {% elif user.get_NumberOfPeople() == "3" %}
+        <td>26 to 40</td>
+          {% elif user.get_NumberOfPeople() == "4" %}
+        <td>Above 40</td>
+        {% endif %}
+        <td>{{ user.get_remarks() }}</td>
+        <td><a href="/updateUser/{{user.get_user_id()}}" class="btn btn-warning">Update</a></td>
+        <td>
+          <form action="{{url_for('delete_user', id=user.get_user_id())}}" method="POST">
+           <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{user.get_Question()}} {{user.get_Reason()}}?');">
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
