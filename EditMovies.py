@@ -1,12 +1,15 @@
-from flask_wtf import Form
-from wtforms import Form, FileField, BooleanField, StringField, RadioField, SelectField, TextAreaField, validators
-from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms.validators import DataRequired, Email
+from flask_uploads import UploadSet, IMAGES
+from wtforms import Form, BooleanField, TextAreaField
+#StringField, RadioField, SelectField, validators
+from wtforms.validators import DataRequired
+from flask_wtf.file import FileField, FileRequired
+
+photos = UploadSet('photos', IMAGES)
 
 class UpdateMoviesForm(Form):
 #    movie_title = TextAreaField('Movie Title', validators=[DataRequired()])
+    movie_image = FileField(validators=[FileRequired()])
     movie_name = TextAreaField('Movie Name', validators=[DataRequired()])
-#    movie_image = FileField('Movie Image', validators=[FileRequired(), FileAllowed(['jpg', 'png','webp','jfif'], 'Images only!')])
     movieagerating = TextAreaField('Movie Rating', validators=[DataRequired()])
     movieduration = TextAreaField('Movie Duration', validators=[DataRequired()])
     gvexclusivetag = BooleanField('GV EXCLUSIVE?')
@@ -23,12 +26,13 @@ class UpdateMoviesForm(Form):
     movieEmotional = BooleanField('Emotional')
     movieMystery = BooleanField('Mystery')
     movieAction = BooleanField('Action')
-
 #Form object – Used to create a WTForms Form.
 #StringField object – Used to create an HTML textfield.
 #RadioField object – Used to create an HTML radio button group.
 #SelectField object – Used to create an HTML dropdown list.
 #TextAreaField object – Used to create an HTML textarea.
 #validators object – validators allow you to specify the constraints for each of the fields such as minimum and maximum length, DataRequried or Optional.
+
+
 
 
