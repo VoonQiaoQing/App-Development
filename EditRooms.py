@@ -1,25 +1,35 @@
-from wtforms import Form, StringField, RadioField, SelectField, TextAreaField, validators
+from flask_uploads import UploadSet, IMAGES
+from wtforms import Form, BooleanField, TextAreaField
+#StringField, RadioField, SelectField, validators
+from wtforms.validators import DataRequired
+from flask_wtf.file import FileField, FileRequired
 
-class CreateRoomsForm(Form):
-#    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-#    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-#    gender = SelectField('Gender', [validators.DataRequired()], choices=[('', 'Select'), ('F', 'Female'), ('M', 'Male')], default='')
-#    membership = RadioField('Membership', choices=[('F', 'Fellow'), ('S', 'Senior'), ('P', 'Professional')], default='F')
-#    remarks = TextAreaField('Remarks', [validators.Optional()])
+photos = UploadSet('photos', IMAGES)
 
-    room_title = TextAreaField('Rooms Pricings Title', [validators.Optional()])
-    small_roominfo = TextAreaField('Small Room Information', [validators.Optional()])
-#    small_roomimage =
-    med_roominfo = TextAreaField('Medium Room Information', [validators.Optional()])
-#    med_roomimage1 =
-#    med_roomimage2 =
-    large_roominfo = TextAreaField('Large Room Information', [validators.Optional()])
-#    large_roomimage1 =
-#    large_roomimage2 =
-
+class UpdateMoviesForm(Form):
+#    movie_title = TextAreaField('Movie Title', validators=[DataRequired()])
+    movie_image = FileField(validators=[FileRequired()])
+    movie_name = TextAreaField('Movie Name', validators=[DataRequired()])
+    movieagerating = TextAreaField('Movie Rating', validators=[DataRequired()])
+    movieduration = TextAreaField('Movie Duration', validators=[DataRequired()])
+    gvexclusivetag = BooleanField('GV EXCLUSIVE?')
+    #choices  =['Horror','Drama','Comedy','Science','Romance','Animation','Crime Film','Thriller','Adventure','Emotional','Mystery','Action']
+    movieHorror = BooleanField('Horror')
+    movieDrama = BooleanField('Drama')
+    movieComedy = BooleanField('Comedy')
+    movieScience = BooleanField('Science')
+    movieRomance = BooleanField('Romance')
+    movieAnimation = BooleanField('Animation')
+    movieCrimeFilm = BooleanField('CrimeFilm')
+    movieThriller = BooleanField('Thriller')
+    movieAdventure = BooleanField('Adventure')
+    movieEmotional = BooleanField('Emotional')
+    movieMystery = BooleanField('Mystery')
+    movieAction = BooleanField('Action')
 #Form object – Used to create a WTForms Form.
 #StringField object – Used to create an HTML textfield.
 #RadioField object – Used to create an HTML radio button group.
 #SelectField object – Used to create an HTML dropdown list.
 #TextAreaField object – Used to create an HTML textarea.
 #validators object – validators allow you to specify the constraints for each of the fields such as minimum and maximum length, DataRequried or Optional.
+
