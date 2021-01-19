@@ -1,31 +1,16 @@
-from flask_uploads import UploadSet, IMAGES
-from wtforms import Form, BooleanField, TextAreaField
-#StringField, RadioField, SelectField, validators
-from wtforms.validators import DataRequired
-from flask_wtf.file import FileField, FileRequired
+from wtforms import Form, FileField, RadioField, SelectField, TextAreaField, validators
 
-photos = UploadSet('photos', IMAGES)
-
-class UpdateMoviesForm(Form):
-#    movie_title = TextAreaField('Movie Title', validators=[DataRequired()])
-    movie_image = FileField(validators=[FileRequired()])
-    movie_name = TextAreaField('Movie Name', validators=[DataRequired()])
-    movieagerating = TextAreaField('Movie Rating', validators=[DataRequired()])
-    movieduration = TextAreaField('Movie Duration', validators=[DataRequired()])
-    gvexclusivetag = BooleanField('GV EXCLUSIVE?')
-    #choices  =['Horror','Drama','Comedy','Science','Romance','Animation','Crime Film','Thriller','Adventure','Emotional','Mystery','Action']
-    movieHorror = BooleanField('Horror')
-    movieDrama = BooleanField('Drama')
-    movieComedy = BooleanField('Comedy')
-    movieScience = BooleanField('Science')
-    movieRomance = BooleanField('Romance')
-    movieAnimation = BooleanField('Animation')
-    movieCrimeFilm = BooleanField('CrimeFilm')
-    movieThriller = BooleanField('Thriller')
-    movieAdventure = BooleanField('Adventure')
-    movieEmotional = BooleanField('Emotional')
-    movieMystery = BooleanField('Mystery')
-    movieAction = BooleanField('Action')
+class CreateRoomsForm(Form):
+    room_title = TextAreaField('Rooms Pricings Title', [validators.DataRequired()])
+    small_roominfo = TextAreaField('Small Room Information', [validators.DataRequired()])
+#    small_roomimage =
+    med_roominfo = TextAreaField('Medium Room Information', [validators.DataRequired()])
+#    med_roomimage1 =
+#    med_roomimage2 =
+    large_roominfo = TextAreaField('Large Room Information', [validators.DataRequired()])
+#    large_roomimage1 =
+#    large_roomimage2 =
+    gvexclusiveinfo =  TextAreaField('GV Exclusive Information', [validators.DataRequired()])
 #Form object – Used to create a WTForms Form.
 #StringField object – Used to create an HTML textfield.
 #RadioField object – Used to create an HTML radio button group.
