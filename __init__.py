@@ -1,45 +1,42 @@
-from flask import send_from_directory, Flask, flash,render_template,request, redirect, url_for, session
-from Forms import CreateUserForm
-from EditMovies import UpdateMoviesForm
-from EditRooms import CreateRoomsForm
-import shelve, RoomInfo, MovieInfo, HomeInfo
-from werkzeug.utils import secure_filename
+from flask import Flask,render_template,request, redirect, url_for, send_from_directory
+#session
+#from Forms import CreateUserForm
+import imghdr
 import os
+from flask_uploads import configure_uploads, patch_request_class
+from EditMovies import UpdateMoviesForm, photos
+from EditRooms import CreateRoomsForm
+import shelve, RoomInfo, MovieInfo
+    #HomeInfo
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import CombinedMultiDict
 
-path = os.getcwd()
-UPLOAD_FOLDER = os.path.join(path, 'uploads')
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-
-# Make directory if "uploads" folder not exists
-if not os.path.isdir(UPLOAD_FOLDER):
-    os.mkdir(UPLOAD_FOLDER)
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-app.config['SECRET_KEY'] = 'thisisasecret'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SECRET_KEY'] = 'I have a dream'
+app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'uploads')
+app.config['UPLOAD_EXTENSIONS'] = ['.jfif','.webp','.jpg', '.png', '.gif']
+
+configure_uploads(app, photos)
+patch_request_class(app)
+
+def validate_image(stream):
+    header = stream.read(512)
+    stream.seek(0)
+    format = imghdr.what(None, header)
+    if not format:
+        return None
+    return '.' + (format if format != 'jpeg' else 'jpg')
+
+@app.errorhandler(413)
+def too_large(e):
+    return "File is too large", 413
 
 @app.route('/')
 def home():
     return render_template('home.html')
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-#@app.route('/Movies')
-#def movies():
-#    staff_dict = {}
-#    db = shelve.open('storage.db', 'r')
-#    staff_dict = db['Staff']
-#    db.close()
-
-#    staff_list = []
-#    for key in staff_dict:
-#        staff = staff_dict.get(key)
-#        staff_list.append(staff)
-
-#    return render_template('movies.html', staff_list=staff_list)
 
 @app.route('/filter')
 def vmd_timestamp():
@@ -53,19 +50,6 @@ def purchase():
 #staff_list – The 'staff_list list' will be used in the Retrieve Users template
 # to retrieve and display the details of all the user objects that
 # were stored in the users_dict dictionary that was stored in shelve.
-@app.route('/MoviesStaff')
-def moviesstaff():
-    movieinfo_dict = {}
-    db = shelve.open('movieinfostorage.db', 'r')
-    movieinfo_dict = db['MovieInfo']
-    db.close()
-
-    movieinfo_list = []
-    for key in movieinfo_dict:
-        movieinfo = movieinfo_dict.get(key)
-        movieinfo_list.append(movieinfo)
-
-    return render_template('moviesstaff.html', movieinfo_list=movieinfo_list)
 
 #@app.route('/MoviesStaff')
 #def moviesstaff():
@@ -80,6 +64,36 @@ def moviesstaff():
 #        movieinfo_list.append(movieinfo)
 
 #    return render_template('moviesstaff.html', movieinfo_list=movieinfo_list)
+
+@app.route('/EditRooms', methods=['GET', 'POST'])
+def EditRooms():
+    room_form = CreateRoomsForm(request.form)
+#    file_url = send_from_directory(app.config['UPLOAD_FOLDER'],filename)
+    if request.method == 'POST' and room_form.validate():
+        roominfo_dict = {}
+        db = shelve.open('roominfostorage.db', 'c')
+
+        try:
+            roominfo_dict = db['RoomInfo']
+        except:
+            print("Error in retrieving Staff from storage.db.")
+
+        roominfo = RoomInfo.RoomInfo(room_form.room_title.data,
+                                    room_form.small_roominfo.data,
+                                    room_form.med_roominfo.data,
+                                    room_form.large_roominfo.data,
+                                    room_form.gvexclusiveinfo.data)
+        roominfo_dict[roominfo.get_staff_id()] = roominfo
+        db['RoomInfo'] = roominfo_dict
+
+        # Test codes
+        roominfo_dict = db['RoomInfo'] #Value of Staff Key in Storage
+        roominfo = roominfo_dict[roominfo.get_staff_id()] #value of Value of Staff Key in Storage
+        print("was stored in storage.mb successfully with user_id ==", roominfo.get_staff_id())
+
+        db.close()
+        return redirect(url_for('home'))
+    return render_template('editRooms.html', form=room_form)
 
 @app.route('/ChooseMovies')
 def ChooseMovies():
@@ -119,9 +133,17 @@ def ChooseMovies():
 
 @app.route('/CreateMovies', methods=['GET', 'POST'])
 def CreateMovies(): #(filename?)
-    create_movieform = UpdateMoviesForm(request.form)
+    create_movieform = UpdateMoviesForm(CombinedMultiDict((request.files, request.form)))
 #    file_url = send_from_directory(app.config['UPLOAD_FOLDER'],filename)
-    if request.method == 'POST' and create_movieform.validate():
+    if create_movieform.validate():
+        filename = secure_filename(create_movieform.movie_image.data.filename)
+        if filename != '':
+            file_ext = os.path.splitext(filename)[1]
+            if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
+                    file_ext != validate_image(create_movieform.movie_image.data.stream):
+                return "Invalid Image",400
+            else:
+                create_movieform.movie_image.data.save(os.path.join(basedir, 'uploads', filename))
 
         movieinfo_dict = {}
         db = shelve.open('movieinfostorage.db', 'c')
@@ -131,10 +153,14 @@ def CreateMovies(): #(filename?)
         except:
             print("Error in retrieving Staff from storage.db.")
 
+#        filename = secure_filename(create_movieform.movie_image.data.filename)
+#        file_path = os.path.join(app.config['UPLOADED_IMAGES_DEST'], filename)
+#        create_movieform.movie_image.data.save(file_path)
+
         movieinfo = MovieInfo.MovieInfo(
 #                                   create_movieform.movie_title.data,
                                     create_movieform.movie_name.data,
-#                                   file_url,
+#                                    create_movieform.movie_image.data,
                                     create_movieform.movieagerating.data,
                                     create_movieform.movieduration.data,
                                     create_movieform.gvexclusivetag.data,
@@ -160,7 +186,8 @@ def CreateMovies(): #(filename?)
         print("was stored in storage.mb successfully with user_id ==", movieinfo.get_movie_id())
 
         db.close()
-        return redirect(url_for('home'))
+
+        return redirect(url_for('moviesstaff', filename=filename))
     return render_template('createMovie.html', form=create_movieform)
 
 @app.route('/UpdateMovie/<int:id>/', methods=['GET', 'POST'])
@@ -224,18 +251,62 @@ def UpdateMovie(id):
 
         return render_template('updateMovie.html', form=update_movieform)
 
-#@app.route('/delete_user', methods=['POST'])
-#def delete_movie():
-#    staff_dict = {}
-#    db = shelve.open('storage.db', 'w')
-#    staff_dict = db['Staff']
+#@app.route('/MoviesStaff/<filename>')
+#def uploaded_file(filename):
+#    return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'], filename)
 
-#    staff_dict.pop()
+def joinPath(param, file):
+    pass
 
-#    db['Staff'] = staff_dict
-#    db.close()
+@app.route('/MoviesStaff')
+def moviesstaff():
+    movieinfo_dict = {}
+    db = shelve.open('movieinfostorage.db', 'r')
+    movieinfo_dict = db['MovieInfo']
+    db.close()
 
-#    return redirect(url_for('moviesstaff.html'))
+    roominfo_dict = {}
+    db = shelve.open('roominfostorage.db', 'r')
+    roominfo_dict = db['RoomInfo']
+    db.close()
+
+    movieinfo_list = []
+    for key in movieinfo_dict:
+        movieinfo = movieinfo_dict.get(key)
+        movieinfo_list.append(movieinfo)
+
+    roominfo_list = []
+    for key in roominfo_dict:
+        roominfo = roominfo_dict.get(key)
+        roominfo_list.append(roominfo)
+
+#   basedir = os.path.abspath(os.path.dirname(__file__))
+#   app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'uploads')
+
+    image_list = os.listdir(app.config['UPLOADED_PHOTOS_DEST'])
+    print(image_list)
+    return render_template('moviesstaff.html', movieinfo_list=movieinfo_list,  roominfo_list=roominfo_list, image_list=image_list)
+
+@app.route('/MoviesStaff/<filename>')
+def send_image(filename):
+    return send_from_directory("uploads",filename)
+
+@app.route('/DeleteMovie/<int:id>', methods=['POST'])
+def DeleteMovie(id):
+    movieinfo_dict = {}
+    db = shelve.open('movieinfostorage.db', 'w')
+    movieinfo_dict = db['MovieInfo']
+
+    movieinfo_dict.pop(id)
+
+    db['MovieInfo'] = movieinfo_dict
+    db.close()
+
+#movie_id = 1,2,3
+#image_list = [1,2,3]
+    new_id = id
+    os.remove(os.path.join(app.config['UPLOADED_ITEMS_DEST'], filename))
+    return redirect(url_for('moviesstaff'))
 
 #@app.route('/Staff')
 #def staff():
