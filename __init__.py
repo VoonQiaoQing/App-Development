@@ -1,6 +1,5 @@
 from flask import Flask,render_template,request, redirect, url_for, send_from_directory
 #session
-#from Forms import CreateUserForm
 import imghdr
 import os
 from flask_uploads import configure_uploads, patch_request_class
@@ -17,7 +16,7 @@ app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.config['SECRET_KEY'] = 'I have a dream'
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'uploads')
-app.config['UPLOAD_EXTENSIONS'] = ['.jfif','.webp','.jpg', '.png', '.gif']
+app.config['UPLOAD_EXTENSIONS'] = ['.jfif','.webp','.jpg','.png','.gif']
 
 configure_uploads(app, photos)
 patch_request_class(app)
@@ -151,11 +150,7 @@ def CreateMovies(): #(filename?)
         try:
             movieinfo_dict = db['MovieInfo']
         except:
-            print("Error in retrieving Staff from storage.db.")
-
-#        filename = secure_filename(create_movieform.movie_image.data.filename)
-#        file_path = os.path.join(app.config['UPLOADED_IMAGES_DEST'], filename)
-#        create_movieform.movie_image.data.save(file_path)
+            print("Error in retrieving Movies from movieinfostorage.db.")
 
         movieinfo = MovieInfo.MovieInfo(
 #                                   create_movieform.movie_title.data,
@@ -177,16 +172,33 @@ def CreateMovies(): #(filename?)
                                     create_movieform.movieMystery.data,
                                     create_movieform.movieAction.data)
 
+        movieid_file = open('movieid.txt', 'r')
+        content = movieid_file.read()
+        increasemovieid = content
+        movieid_file.close()
+
+        movieid_file = open('movieid.txt', 'w')
+        verifycontent = int(increasemovieid)
+        if isinstance(verifycontent,int) == True:
+            verifycontent += 1
+            movieid_file.write(str(verifycontent))
+        movieid_file.close()
+
+        movieid_file = open('movieid.txt', 'r')
+        content = movieid_file.read()
+        currentmovieid = int(content)
+        movieid_file.close()
+
+        movieinfo.set_movie_id(currentmovieid)
         movieinfo_dict[movieinfo.get_movie_id()] = movieinfo
         db['MovieInfo'] = movieinfo_dict
 
         # Test codes
         movieinfo_dict = db['MovieInfo'] #Value of Staff Key in Storage
-        movieinfo = movieinfo_dict[movieinfo.get_movie_id()] #value of Value of Staff Key in Storage
+        created_movies_list = movieinfo_dict[movieinfo.get_movie_id()] #value of Value of Staff Key in Storage
         print("was stored in storage.mb successfully with user_id ==", movieinfo.get_movie_id())
 
         db.close()
-
         return redirect(url_for('moviesstaff', filename=filename))
     return render_template('createMovie.html', form=create_movieform)
 
@@ -220,7 +232,6 @@ def UpdateMovie(id):
 
         db['MovieInfo'] = movieinfo_dict
         db.close()
-
         return redirect(url_for('moviesstaff'))
 
     else:
@@ -251,10 +262,6 @@ def UpdateMovie(id):
 
         return render_template('updateMovie.html', form=update_movieform)
 
-#@app.route('/MoviesStaff/<filename>')
-#def uploaded_file(filename):
-#    return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'], filename)
-
 def joinPath(param, file):
     pass
 
@@ -283,6 +290,7 @@ def moviesstaff():
 #   basedir = os.path.abspath(os.path.dirname(__file__))
 #   app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'uploads')
 
+#maybe use dict?
     image_list = os.listdir(app.config['UPLOADED_PHOTOS_DEST'])
     print(image_list)
     return render_template('moviesstaff.html', movieinfo_list=movieinfo_list,  roominfo_list=roominfo_list, image_list=image_list)
@@ -291,7 +299,7 @@ def moviesstaff():
 def send_image(filename):
     return send_from_directory("uploads",filename)
 
-@app.route('/DeleteMovie/<int:id>', methods=['POST'])
+@app.route('/DeleteMovie/<int:id>/', methods=['POST'])
 def DeleteMovie(id):
     movieinfo_dict = {}
     db = shelve.open('movieinfostorage.db', 'w')
@@ -304,13 +312,12 @@ def DeleteMovie(id):
 
 #movie_id = 1,2,3
 #image_list = [1,2,3]
-    new_id = id
-    os.remove(os.path.join(app.config['UPLOADED_ITEMS_DEST'], filename))
+#if image in the middle of the folder is deleted,
+#positions will be complicated.
+#store filename in dict to persist position
+#    newid = id
+#    os.remove(os.path.join(app.config['UPLOADED_ITEMS_DEST'], filename))
     return redirect(url_for('moviesstaff'))
-
-#@app.route('/Staff')
-#def staff():
-#    return render_template('testform.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
