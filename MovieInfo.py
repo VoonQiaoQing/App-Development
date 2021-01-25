@@ -1,9 +1,9 @@
 class MovieInfo:
-    movie_id = -1
+#    movie_id = -1
     def __init__(self,moviename,movieagerating,movieduration,gvexclusivetag,movieHorror,movieDrama,movieComedy,movieScience,movieRomance,movieAnimation,movieCrimeFilm,movieThriller,movieAdventure,movieEmotional,movieMystery,movieAction):
-        self.__staff_id = 1               #^movietitle,movieimage
-        MovieInfo.movie_id += 1
-        self.__movie_id = MovieInfo.movie_id
+#        self.__staff_id = 1               #^movietitle,movieimage
+#        MovieInfo.movie_id += 1
+        self.__movie_id = 0
 #        self.__movietitle = movietitle
 #        self.__movieimage = movieimage
         self.__moviename = moviename
@@ -24,6 +24,8 @@ class MovieInfo:
         self.__movieMystery = movieMystery
         self.__movieAction = movieAction
 
+    def set_movie_id(self,movie_id):
+        self.__movie_id = movie_id
     def set_movietitle(self,movietitle):
         self.__movietitle = movietitle
     def set_moviename(self,moviename):
@@ -64,8 +66,8 @@ class MovieInfo:
     def set_movieAction(self,movieAction):
         self.__movieAction = movieAction
 
-    def get_staff_id(self):
-        return self.__staff_id
+#    def get_staff_id(self):
+#        return self.__staff_id
     def get_movie_id(self):
         return self.__movie_id
     def get_movietitle(self):
