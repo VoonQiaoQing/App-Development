@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Retrieve Reviews{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Retrieve Reviews</h1>
+
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Rating</th>
+        <th>Review</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for user in users_list %}
+      <tr>
+        <td>{{ user.get_rating() }}</td>
+        <td>{{ user.get_review() }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
