@@ -5,7 +5,8 @@ import os
 from flask_uploads import configure_uploads, patch_request_class
 from EditMovies import UpdateMoviesForm, photos
 from EditRooms import CreateRoomsForm
-import shelve, RoomInfo, MovieInfo
+from Forms import CreateUserForm
+import shelve, RoomInfo, MovieInfo, UserId, User
     #HomeInfo
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import CombinedMultiDict
@@ -37,9 +38,9 @@ def too_large(e):
 def home():
     return render_template('home.html')
 
-@app.route('/filter')
-def vmd_timestamp():
-    return render_template('moviesfilter.html')
+# @app.route('/filter')
+# def vmd_timestamp():
+#     return render_template('moviesfilter.html')
 
 @app.route('/purchase')
 def purchase():
@@ -49,20 +50,6 @@ def purchase():
 #staff_list – The 'staff_list list' will be used in the Retrieve Users template
 # to retrieve and display the details of all the user objects that
 # were stored in the users_dict dictionary that was stored in shelve.
-
-#@app.route('/MoviesStaff')
-#def moviesstaff():
-#    movieinfo_dict = {}
-#    db = shelve.open('movieinfostorage.db', 'r')
-#    movieinfo_dict = db['MovieInfo']
-#    db.close()
-
-#    movieinfo_list = []
-#    for key in movieinfo_dict:
-#        movieinfo = movieinfo_dict.get(key)
-#        movieinfo_list.append(movieinfo)
-
-#    return render_template('moviesstaff.html', movieinfo_list=movieinfo_list)
 
 @app.route('/EditRooms', methods=['GET', 'POST'])
 def EditRooms():
@@ -107,28 +94,6 @@ def ChooseMovies():
         movieinfo_list.append(movieinfo)
 
     return render_template('chooseMovies.html', movieinfo_list=movieinfo_list)
-
-#@app.route('/CreateMovies', methods=['GET', 'POST'])
-#def upload_file():
-#    if request.method == 'POST':
-        # check if the post request has the file part
-#        if 'file' not in request.files:
-#            flash('No file part')
-#            return redirect(request.url)
-#            file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-#        if file.filename == '':
-#            flash('No selected file')
-#            return redirect(request.url)
-#        if file and allowed_file(file.filename):
-#            filename = secure_filename(file.filename)
-#            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-#           flash('File successfully uploaded')
-#            return redirect (url_for('staffeditmovies',filename=filename))
-#        else:
-#            flash('Allowed file types are txt, pdf, png, jpg, jpeg, gif')
-#            return redirect(request.url)
 
 @app.route('/CreateMovies', methods=['GET', 'POST'])
 def CreateMovies(): #(filename?)
@@ -275,6 +240,100 @@ def UpdateMovie(id):
 def joinPath(param, file):
     pass
 
+@app.route('/Filter')
+def moviesfilter():
+    movieinfo_dict = {}
+    db = shelve.open('movieinfostorage.db', 'r')
+    movieinfo_dict = db['MovieInfo']
+    db.close()
+
+    roominfo_dict = {}
+    db = shelve.open('roominfostorage.db', 'r')
+    roominfo_dict = db['RoomInfo']
+    db.close()
+
+    movieinfo_list = []
+    for key in movieinfo_dict:
+        movieinfo = movieinfo_dict.get(key)
+        movieinfo_list.append(movieinfo)
+
+    roominfo_list = []
+    for key in roominfo_dict:
+        roominfo = roominfo_dict.get(key)
+        roominfo_list.append(roominfo)
+
+#   basedir = os.path.abspath(os.path.dirname(__file__))
+#   app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'uploads')
+
+#maybe use dict?
+    image_list = os.listdir(app.config['UPLOADED_PHOTOS_DEST'])
+    print(image_list)
+    return render_template('moviesfilter.html', movieinfo_list=movieinfo_list,  roominfo_list=roominfo_list, image_list=image_list)
+
+def LoginedUser():
+    LoginedUser_dict = {}
+    loginuser = shelve.open('loginuserstorage.db', 'c')
+
+    try:
+        LoginedUser_dict = loginuser['Users']
+    except:
+        print('Error in retrieving Users from storage.db.')
+
+    LoginedUserID = UserId.UserId("Staff")
+    LoginedUser_dict[LoginedUserID.get_UserID()] = LoginedUserID
+    loginuser['Users'] = LoginedUser_dict
+
+    # Test codes
+    LoginedUser_dict = loginuser['Users']
+    LoginedUserID = LoginedUser_dict[LoginedUserID.get_UserID()]
+    print(LoginedUserID.get_UserID(), 'was stored in storage.db successfully with user_id ==', LoginedUserID.get_UserID())
+    loginuser.close()
+
+#LoginedUser()
+
+@app.route('/MoviesCustomer')
+def moviescustomer():
+    movieinfo_dict = {}
+    db = shelve.open('movieinfostorage.db', 'r')
+    movieinfo_dict = db['MovieInfo']
+    db.close()
+
+    roominfo_dict = {}
+    db = shelve.open('roominfostorage.db', 'r')
+    roominfo_dict = db['RoomInfo']
+    db.close()
+
+#    userinfo_dict = {}
+#    db = shelve.open('loginuserstorage.db', 'r')
+#    userinfo_dict = db['RoomInfo']
+#    db.close()
+
+    # userinfo_list = []
+    # for key in userinfo_dict:
+    #     userinfo = userinfo_dict.get(key)
+    #     userinfo_list.append(userinfo)
+
+    movieinfo_list = []
+    for key in movieinfo_dict:
+        movieinfo = movieinfo_dict.get(key)
+        movieinfo_list.append(movieinfo)
+
+    roominfo_list = []
+    for key in roominfo_dict:
+        roominfo = roominfo_dict.get(key)
+        roominfo_list.append(roominfo)
+
+#   basedir = os.path.abspath(os.path.dirname(__file__))
+#   app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'uploads')
+
+#maybe use dict?
+    image_list = os.listdir(app.config['UPLOADED_PHOTOS_DEST'])
+    print(image_list)
+    return render_template('moviescustomer.html', moviecount=len(movieinfo_list)
+                           ,roomcount=len(roominfo_list) ,imagecount=len(image_list)
+                           ,movieinfo_list=movieinfo_list ,roominfo_list=roominfo_list
+                           ,image_list=image_list)
+
 @app.route('/MoviesStaff')
 def moviesstaff():
     movieinfo_dict = {}
@@ -303,7 +362,7 @@ def moviesstaff():
 #maybe use dict?
     image_list = os.listdir(app.config['UPLOADED_PHOTOS_DEST'])
     print(image_list)
-    return render_template('moviesstaff.html', movieinfo_list=movieinfo_list,  roominfo_list=roominfo_list, image_list=image_list)
+    return render_template('moviesstaff.html', moviecount=len(movieinfo_list) , roomcount=len(roominfo_list) ,imagecount=len(image_list) ,movieinfo_list=movieinfo_list,  roominfo_list=roominfo_list, image_list=image_list)
 
 @app.route('/MoviesStaff/<filename>')
 def send_image(filename):
@@ -329,5 +388,91 @@ def DeleteMovie(id):
 #    os.remove(os.path.join(app.config['UPLOADED_ITEMS_DEST'], filename))
     return redirect(url_for('moviesstaff'))
 
+@app.route('/contactUs')
+def contact_us():
+    return render_template('contactUs.html')
+
+@app.route('/createQuestion', methods=['GET', 'POST'])
+def create_question():
+    create_user_form = CreateUserForm(request.form)
+    if request.method == 'POST' and create_user_form.validate():
+        users_dict = {}
+        db = shelve.open('storage.db', 'c')
+        try:
+            users_dict = db['Users']
+        except:
+            print("Error in retrieving Users from storage.db.")
+
+        user = User.User(create_user_form.Question.data, create_user_form.Answer.data, create_user_form.Availability.data, create_user_form.NumberOfPeople.data, create_user_form.remarks.data)
+        users_dict[user.get_user_id()] = user
+        db['Users'] = users_dict
+        db.close()
+
+        return redirect(url_for('retrieve_questions'))
+    return render_template('createQuestion.html', form=create_user_form)
+
+@app.route('/retrieveQuestion')
+def retrieve_questions():
+    users_dict = {}
+    db = shelve.open('storage.db', 'r')
+    users_dict = db['Users']
+    db.close()
+
+    users_list = []
+    for key in users_dict:
+        user = users_dict.get(key)
+        users_list.append(user)
+
+    return render_template('retrieveQuestions.html',count=len(users_list), users_list=users_list)
+
+
+@app.route('/updateQuestion/<int:id>/', methods=['GET', 'POST'])
+def update_user(id):
+    update_user_form = CreateUserForm(request.form)
+    if request.method == 'POST' and update_user_form.validate():
+        users_dict = {}
+        db = shelve.open('storage.db', 'w')
+        users_dict = db['Users']
+
+        user = users_dict.get(id)
+        user.set_Question(update_user_form.Question.data)
+        user.set_Answer(update_user_form.Answer.data)
+        user.set_Availability(update_user_form.Availability .data)
+        user.set_NumberOfPeople(update_user_form.NumberOfPeople.data)
+        user.set_remarks(update_user_form.remarks.data)
+
+        db['Users'] = users_dict
+        db.close()
+
+        return redirect(url_for('retrieve_questions'))
+    else:
+        users_dict = {}
+        db = shelve.open('storage.db', 'r')
+        users_dict = db['Users']
+        db.close()
+
+        user = users_dict.get(id)
+        update_user_form.Question.data = user.get_Question()
+        update_user_form.Answer.data = user.get_Answer()
+        update_user_form.Availability.data = user.get_Availability()
+        update_user_form.NumberOfPeople.data = user.get_NumberOfPeople()
+        update_user_form.remarks.data = user.get_remarks()
+
+        return render_template('updateQuestions.html', form=update_user_form)
+
+@app.route('/deleteUser/<int:id>', methods=['POST'])
+def delete_user(id):
+        users_dict = {}
+        db = shelve.open('storage.db', 'w')
+        users_dict = db['Users']
+
+        users_dict.pop(id)
+
+        db['Users'] = users_dict
+        db.close()
+
+        return redirect(url_for('retrieve_questions'))
+
 if __name__ == '__main__':
     app.run(debug=True)
+
