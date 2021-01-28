@@ -1,0 +1,14 @@
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<form method="POST" action="">
+
+    <h3> Enter the location</h3>
+    <p>{{ render_field(form.location1) }}</p>
+    <p>{{ render_field(form.location2) }}</p>
+    <p>{{ render_field(form.location3) }}</p>
+    <p>{{ render_field(form.location4) }}</p>
+    <p>{{ render_field(form.location5) }}</p>
+    <input type="submit" value="Summit" class="btn btn-primary"/>
+
+</form>
+{% endblock %}

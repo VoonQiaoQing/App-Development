@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!------ Include the above in your HEAD tag ---------->
+{% from "includes/_formHelper.html" import render_field %}
+{% block content %}
+<form method="POST" action="">
+  <h3>Payment</h3>
+            <p >Accepted Cards:</p>
+            <div class="icon-container">
+              <i class="fa fa-cc-visa" style="color:navy;"></i>
+              <i class="fa fa-cc-amex" style="color:blue;"></i>
+              <i class="fa fa-cc-mastercard" style="color:red;"></i>
+              <i class="fa fa-cc-discover" style="color:orange;"></i>
+            </div>
+
+  <h5> Card Holder's Name: {{ render_field(form.name_on_card) }}</h5>
+  <h5>Card Number: {{ render_field(form.card_number1) }} {{ render_field(form.card_number2) }} {{ render_field(form.card_number3) }} {{ render_field(form.card_number4) }}</h5>
+  <h5> Expiry Date: {{ render_field(form.expiry_month) }} / {{ render_field(form.expiry_year) }}</h5>
+  <h5> CVV No. {{ render_field(form.cvv_number) }}</h5>
+  <input type="submit" value="Pay" class="btn btn-primary"/>
+
+
+</form>
+{% endblock %}

@@ -1,0 +1,64 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<style>
+*{
+margin-top: 20px;
+margin-left: 20px;
+margin-right: 20px;
+margin-bottom: 20px;
+}
+
+#image{
+	height: 250px;
+	width: 200px;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	display: inline-block;
+	float: left;
+}
+
+#details{
+margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	display: inline-block;
+	font-size: 19px;}
+</style>
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<h1 >Movie Details</h1>
+<div id="display">
+<img src= "" alt="Norway" id="image">
+
+  <h2> Movie Name:{{movie.get_moviename()}} </h2>
+<h2>{{movie.get_movieagerating()}}</h2>
+  <h2>Movie Duration: {{movie.get_movieduration()}}</h2>
+  <form method="POST" action="">
+  <table class="table align-middle">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Time</th>
+      <th scope="col">Location</th>
+      <th scope="col">Room Type</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{render_field(form.Date)}}</td>
+      <td>{{render_field(form.Time)}}</td>
+      <td>{{render_field(form.location)}}</td>
+      <td>{{render_field(form.roomtype) }}</td>
+      <td> <input type="submit" value="Submit" class="btn btn-primary"/></td>
+    </tr>
+
+  </tbody>
+</table>
+</form>
+{% endblock %}
+
