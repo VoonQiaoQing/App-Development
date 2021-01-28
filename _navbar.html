@@ -1,34 +1,53 @@
+<style>
+  .login{
+    padding-left:50px;
+    }
+</style>
 <nav class="navbar navbar-expand-sm bg-grey navbar-dark">
   <!-- Brand -->
   <!-- Links -->
-  <a class="navbar-brand" href="/"><img style="width: 85px;" src="static/goldenlogo.png" alt=""> Home</a>
+  <a class="navbar-brand" href="/"><img style="width: 85px;" src= "{{ url_for('static', filename='goldenlogo.png') }}" alt=""> Home</a>
   <ul class="navbar-nav">
     <li class="nav-item">
-      <a class="nav-link" href="/Movies">Movies</a>
-    </li>
-
+  <!--       <a class="nav-link" href="/Movies">Movies</a>
+    </li> -->
     <li class="nav-item">
-      <a class="nav-link" href="/MoviesStaff">MoviesStaff</a>
+      <a class="nav-link" href="/MoviesStaff">Edit Movies</a>
     </li>
-    <!-- Dropdown -->
     <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-        Admin
+      <a class="nav-link dropdown-toggle" href="" id="navbardrop" data-toggle="dropdown">
+       Help
       </a>
       <div class="dropdown-menu">
-        <a class="dropdown-item" href="/add_location">Add Location</a>
-        <a class="dropdown-item" href="/retrieve_location">Update Location</a>
-        <a class="dropdown-item" href="/add_time">Add Time</a>
-        <a class="dropdown-item" href="/retrieve_time">Update Time</a>
+        <a class="dropdown-item" href="/createQuestion">Create</a>
+        <a class="dropdown-item" href="/retrieveQuestion">Retrieve</a>
       </div>
     </li>
+    {% if 'login' in session %}
+    <li class="Profile">
+      <a class="nav-link" href="/profile">Profile</a>
+    </li>
+    <li class="Profile">
+      <a class="nav-link" href="/logout">Logout</a>
+    </li>
+    {% else %}
+    <li class="Register">
+      <a class="nav-link" href="/register">Register</a>
+    </li>
+    <li class="Login">
+      <a class="nav-link" href="/login">Login</a>
+    </li>
+    {% endif %}
 
-    <li class="nav-item">
+
+
+
+  <!--           <li class="nav-item">
+      <a class="nav-link" href="/CreateMovies" style="opacity: 0.6; cursor: not-allowed;">Create Movies</a>
+    </li> -->
+  <!--    <li class="nav-item">
       <a class="nav-link" href="/Staff" style="opacity: 0.6; cursor: not-allowed;">Staff</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/ticket">My Ticket</a>
-    </li>
+    </li> -->
   </ul>
 </nav>
 
