@@ -1,23 +1,14 @@
 {% extends "base.html" %}
 {% block title %}FAQ Page{% endblock %}\
 {% block content %}
-<h1 class="display-9">SERVICES</h1>
 
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link active" data-toggle="tab" href="#FAQ">FAQ</a>
-
-      <p class="nav-link dropdown-toggle" href="" id="navbardrop" data-toggle="dropdown">
-        How far in advance can i book my tickets?
-      </p>
-      <div class="dropdown-menu">
-        <p class="dropdown-item" href="#">You are able to book your tickets 5 days in advance </p>
-      </div>
-    <!DOCTYPE html>
-<html>
+<html xmlns:color="http://www.w3.org/1999/xhtml">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+*{
+background: black;
+}
 .collapsible {
   background-color: black;
   color: gold;
@@ -35,20 +26,20 @@
 }
 
 .content {
-  padding: 0 10px;
+  padding: 0 5px;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.2s ease-out;
+  transition: max-height 1.5s ease-out;
   background-color:black;
-  color:gold ;
+  color:gold;
 }
 </style>
 </head>
 <body>
 
-<h2>Services</h2>
+<h2 style="color:gold;font-size:50px;text-align:center">Services</h2>
 
-<h4>FAQ question board:</h4>
+<h4 style="color:gold;font-size:30px;text-align:center">FAQ question board:</h4>
 <button class="collapsible">How far in advance can i book my tickets?</button>
 <div class="content">
   <p>You can book your tickets 5 days in advance</p>
