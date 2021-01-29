@@ -23,8 +23,33 @@ class CuUser(UserMixin):
         self.email = email
         self.password = password
 
+    def set_username(self, username):
+        self.username = username
+
+    def get_username(self):
+        return self.username
+
+    def set_gender(self, gender):
+        self.gender = gender
+
+    def get_gender(self):
+        return self.gender
+
+    def set_email(self, email):
+        self.email = email
+
+    def get_email(self):
+        return self.email
+
+    def set_password(self, password):
+        self.password = password
+
+    def get_password(self):
+        return self.password
+
     def __repr__(self):
         return f'<CuUser: {self.username}>'
+
 @login_manager.user_loader
 def load_user(user_id):
     return CuUser.get_id(user_id)
