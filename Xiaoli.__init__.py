@@ -51,7 +51,7 @@ def register():
                 register_form.gender.data,
                 register_form.email.data,
                 hashed_password)
-            users_dict[user.email] = user
+            users_dict[int(user.get_id())] = user
             db['Users'] = users_dict
 
             db.close()
@@ -84,15 +84,15 @@ def login():
         users_dict = db['Users']
         db.close()
         users_list = []
-        for email in users_dict:
-            user = users_dict.get(email)
+        for id in users_dict:
+            user = users_dict.get(id)
             users_list.append(user)
         for user in users_list:
             if user.email == login_form.email.data:
                 password = generate_password_hash(login_form.password.data, method='sha256')
                 check_password_hash(user.password, password)
-                session['email'] = True
-                session['login'] = user.email
+                session['id'] = True
+                session['login'] = user.id
                 session['loggedIn'] = user.username
                 return redirect(url_for('home'))
     return render_template('login.html', form=login_form)
@@ -102,7 +102,7 @@ def login():
 def update(id):
 
     update_form = RegisterForm(request.form)
-    if request.method == 'POST' and update_form.validate():
+    if request.method == 'POST':
         users_dict = {}
         db = shelve.open('users.db', 'w')
         users_dict = db['Users']
@@ -129,6 +129,19 @@ def update(id):
 
         return render_template('update.html', form=update_form)
 
+
+@app.route('/delete/<int:id>', methods=['POST'])
+def delete(id):
+    users_dict = {}
+    db = shelve.open('users.db', 'w')
+    users_dict = db['Users']
+
+    users_dict.pop(id)
+
+    db['Users'] = users_dict
+    db.close()
+    session.pop('login')
+    return redirect(url_for('home'))
 
 
 @app.route('/logout')
