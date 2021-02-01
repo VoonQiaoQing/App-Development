@@ -1,30 +1,45 @@
-<nav class="navbar navbar-expand-sm bg-bright navbar-bright">
-  <!-- Brand -->
-  <a class="navbar-brand" href="/"><img src="static/images/robotimagefaq.jpeg" alt=""></a>
-
-  <!-- Links -->
-<ul class="navbar-nav">
+<nav class="navbar navbar-expand-sm bg-grey navbar-dark">
+  <a class="navbar-brand" href="/"><img style="width: 85px;" src= "{{ url_for('static', filename='goldenlogo.png') }}" alt=""> Home</a>
+  <ul class="navbar-nav">
+  <!--     <li class="nav-item">
+      <a class="nav-link" href="/Movies">Movies</a>
+    </li> -->
     <li class="nav-item">
-      <a style="color:gold" class="nav-link" href="/">Home</a>
+      <a class="nav-link" href="/MoviesCustomer">Movies</a>
     </li>
-
-
-    <!-- Dropdown -->
     <li class="nav-item dropdown">
-      <a style="color:gold" class="nav-link dropdown-toggle" href="" id="navbardrop" data-toggle="dropdown">
+      <a class="nav-link dropdown-toggle" href="" id="navbardrop" data-toggle="dropdown">
        Help
       </a>
       <div class="dropdown-menu">
-        <a style="color:black" class="dropdown-item" href="/createQuestion">Create</a>
-        <a style="color:black" class="dropdown-item" href="/retrieveQuestion">Retrieve</a>
+        <a class="dropdown-item" href="/createQuestion">Create</a>
+        <a class="dropdown-item" href="/retrieveQuestion">Retrieve</a>
       </div>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/contactUs">Services</a>
+    </li>
+
+    {% if 'login' in session %}
+    <li class="Profile">
+      <a class="nav-link" href="/profile">{{ session['loggedIn'] }}'s Profile</a>
+    </li>
+    <li class="Profile">
+      <a class="nav-link" href="/logout">Logout</a>
+    </li>
+    {% else %}
+    <li class="Register">
+      <a class="nav-link" href="/register">Register</a>
+    </li>
+    <li class="Login">
+      <a class="nav-link" href="/login">Login</a>
+    </li>
+    {% endif %}
 
     <li class="nav-item">
-      <a style="color:gold" class="nav-link" href="/contactUs" >Services</a>
-
-      </div>
+      <a class="nav-link" href="/MoviesStaff" style="opacity: 0.6; cursor: not-allowed;">Movies</a>
     </li>
+
   </ul>
 </nav>
 
