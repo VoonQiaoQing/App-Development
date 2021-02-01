@@ -1,11 +1,8 @@
 class MovieInfo:
-#    movie_id = -1
-    def __init__(self,moviename,movieagerating,movieduration,gvexclusivetag,movieHorror,movieDrama,movieComedy,movieScience,movieRomance,movieAnimation,movieCrimeFilm,movieThriller,movieAdventure,movieEmotional,movieMystery,movieAction):
-#        self.__staff_id = 1               #^movietitle,movieimage
-#        MovieInfo.movie_id += 1
+    def __init__(self,movieimage,moviename,movieagerating,movieduration,gvexclusivetag,movieHorror,movieDrama,movieComedy,movieScience,movieRomance,movieAnimation,movieCrimeFilm,movieThriller,movieAdventure,movieEmotional,movieMystery,movieAction):
+        self.__staff_id = 0               #^movietitle,movieimage
         self.__movie_id = 0
-#        self.__movietitle = movietitle
-#        self.__movieimage = movieimage
+        self.__movieimage = movieimage
         self.__moviename = moviename
         self.__movieagerating = movieagerating
         self.__movieduration = movieduration
@@ -24,10 +21,14 @@ class MovieInfo:
         self.__movieMystery = movieMystery
         self.__movieAction = movieAction
 
+    def set_staff_id(self,staff_id):
+        self.__staff_id = staff_id
     def set_movie_id(self,movie_id):
         self.__movie_id = movie_id
     def set_movietitle(self,movietitle):
         self.__movietitle = movietitle
+    def set_movieimage(self,movieimage):
+        self.__movieimage = movieimage
     def set_moviename(self,moviename):
         self.__moviename = moviename
     def set_movieagerating(self,movieagerating):
@@ -44,21 +45,18 @@ class MovieInfo:
         self.__movieDrama = movieDrama
     def set_movieComedy(self,movieComedy):
         self.__movieComedy = movieComedy
-
     def set_movieScience(self,movieScience):
         self.__movieScience = movieScience
     def set_movieRomance(self,movieRomance):
         self.__movieRomance = movieRomance
     def set_movieAnimation(self,movieAnimation):
         self.__movieAnimation = movieAnimation
-
     def set_movieCrimeFilm(self,movieCrimeFilm):
         self.__movieCrimeFilm = movieCrimeFilm
     def set_movieThriller(self,movieThriller):
         self.__movieThriller = movieThriller
     def set_movieAdventure(self,movieAdventure):
         self.__movieAdventure = movieAdventure
-
     def set_movieEmotional(self,movieEmotional):
         self.__movieEmotional = movieEmotional
     def set_movieMystery(self,movieMystery):
@@ -66,8 +64,8 @@ class MovieInfo:
     def set_movieAction(self,movieAction):
         self.__movieAction = movieAction
 
-#    def get_staff_id(self):
-#        return self.__staff_id
+    def get_staff_id(self):
+        return self.__staff_id
     def get_movie_id(self):
         return self.__movie_id
     def get_movietitle(self):
@@ -88,21 +86,18 @@ class MovieInfo:
         return self.__movieDrama
     def get_movieComedy(self):
         return self.__movieComedy
-
     def get_movieScience(self):
         return self.__movieScience
     def get_movieRomance(self):
         return self.__movieRomance
     def get_movieAnimation(self):
         return self.__movieAnimation
-
     def get_movieCrimeFilm(self):
         return self.__movieCrimeFilm
     def get_movieThriller(self):
         return self.__movieThriller
     def get_movieAdventure(self):
         return self.__movieAdventure
-
     def get_movieEmotional(self):
         return self.__movieEmotional
     def get_movieMystery(self):
