@@ -6,17 +6,17 @@
 #gvexclusiveprice = "FOR GV EXCLUSIVE / Small Room - Up to 2 PAX \ $28 / Medium Room - Up to 4 PAX \ $40 / Large Room - Up to 6 PAX \ $52"
 
 class RoomInfo:
-    def __init__(self,roomtitle,small_roominfo,med_roominfo,large_roominfo,gvexclusiveinfo):
-        self.__staff_id = 1
+    def __init__(self,roomtitle,small_roominfo,small_roomimage1,small_roomimage2,med_roominfo,med_roomimage,large_roominfo,large_roomimage1,large_roomimage2,gvexclusiveinfo):
+        self.__staff_id = 0
         self.__roomtitle = roomtitle
         self.__small_roominfo = small_roominfo
         self.__med_roominfo = med_roominfo
         self.__large_roominfo = large_roominfo
-#        self.__small_roomimage1 = small_roomimage1
-#        self.__small_roomimage2 = small_roomimage2
-#        self.__med_roomimage = med_roomimage
-#        self.__large_roomimage1 = large_roomimage1
-#        self.__large_roomimage2 = large_roomimage2
+        self.__small_roomimage1 = small_roomimage1
+        self.__small_roomimage2 = small_roomimage2
+        self.__med_roomimage = med_roomimage
+        self.__large_roomimage1 = large_roomimage1
+        self.__large_roomimage2 = large_roomimage2
         self.__gvexclusiveinfo = gvexclusiveinfo
 
     def set_staff_id(self,staff_id):
