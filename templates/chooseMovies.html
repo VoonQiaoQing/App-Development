@@ -1,9 +1,12 @@
+<html>
+<head>
 <style>
 * {
   background-color: black;
   color:white;
 }
 </style>
+</head>
 
 <body>
 {% extends "base.html" %}
@@ -15,18 +18,21 @@
     <div class="MovieName">
         <h5>{{ movieinfo.get_moviename() }}</h5>
         <h6>{{ movieinfo.get_movieagerating() }}<br>{{ movieinfo.get_movieduration() }}</h6>
-        <p><a href="UpdateMovie/{{ movieinfo.get_movie_id() }}" >Edit</a></p>
+        <form action="{{url_for('UpdateMovie', id=movieinfo.get_movie_id())}}" method="POST">
+            <input type="submit" value="Update" class="btn btn-outline-warning">
+        </form>
         <form action="{{url_for('DeleteMovie', id=movieinfo.get_movie_id())}}" method="POST">
-            <input type="submit" value="Delete" class="btn btn-danger"
+            <input type="submit" value="Delete" class="btn btn-outline-warning"
                    onclick="return confirm('Are you sure you want to delete {{movieinfo.get_moviename()}}?');">
         </form>
         <hr>
-
     </div>
 </div>
-    {% endfor %}
-        <p><a href="CreateMovies" >Create Movies</a></p>
-
+{% endfor %}
+        <form action="{{url_for('CreateMovies')}}" method="POST">
+            <input type="submit" value="Create Movies" class="btn btn-outline-warning">
+        </form>
 {% endblock %}
 
 </body>
+</html>
