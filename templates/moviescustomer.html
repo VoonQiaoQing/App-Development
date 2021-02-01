@@ -20,12 +20,6 @@
   float: left;
 }
 
-.RoomsPricing img:nth-child(1), .RoomsPricing img:nth-child(2){
-  width: 125px;
-  height: 205px;
-  padding-bottom: 25px;
-}
-
 .GVE{
   padding-top: 5px;
   padding-right: 5px;
@@ -137,7 +131,9 @@
   float: right;
   width: 95px;
   height:40px;
-  border: 1px solid grey;
+  border: 1px solid;
+  border-color: gold;
+  color: gold;
   position: absolute;
   bottom: 8px;
   right: 16px;
@@ -145,6 +141,7 @@
 
 .purchase:hover, .filter:hover{
   background-color: gold;
+  color: black;
 }
 
 </style>
@@ -159,14 +156,23 @@
 
 {% for roominfo in roominfo_list %}
 <div class="RoomsPricing">
+
+  {% if roomcount == 0 %}
+  <p>There are no rooms.</p>
+  {% elif roomcount == 1 %}
+  <p>There is 1 room.</p>
+  {% else %}
+  <p>There are {{ roomcount }} rooms.</p>
+  {% endif %}
+
 <h2>{{ roominfo.get_roomtitle() }}</h2>
 <div class="w3-third w3-container w3-margin-bottom">
     <div class="w3-container w3-white">
         <h4>{{ roominfo.get_small_roominfo() }}</h4>
     </div>
     <div class="w3-container w3-white">
-        <img src="{{ url_for('static', filename='smallroom1.jpg') }}" alt="Norway" class="w3-hover-opacity">
-        <img src="{{ url_for('static', filename='smallroom2.jpg') }}" alt="Norway" class="w3-hover-opacity">
+        <img style="width: 125px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_small_roomimage1()) }}" alt="Norway" class="w3-hover-opacity">
+        <img style="width: 125px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_small_roomimage2()) }}" alt="Norway" class="w3-hover-opacity">
     </div>
 </div>
 <div class="w3-third w3-container w3-margin-bottom">
@@ -174,7 +180,7 @@
         <h4>{{ roominfo.get_med_roominfo() }}</h4>
     </div>
     <div class="w3-container w3-white">
-        <img src="{{ url_for('static', filename='mediumroom.jpg') }}" alt="Norway" class="w3-hover-opacity">
+        <img style="width: 265px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_med_roomimage()) }}" alt="Norway" class="w3-hover-opacity">
     </div>
 </div>
 <div class="w3-third w3-container w3-margin-bottom">
@@ -182,8 +188,8 @@
         <h4>{{ roominfo.get_large_roominfo() }}</h4>
     </div>
     <div class="w3-container w3-white">
-        <img src="{{ url_for('static', filename='largeroom1.jpg') }}" alt="Norway" class="w3-hover-opacity">
-        <img src="{{ url_for('static', filename='largeroom2.jpg') }}" alt="Norway" class="w3-hover-opacity">
+        <img style="width: 125px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_large_roomimage1()) }}" alt="Norway" class="w3-hover-opacity">
+        <img style="width: 125px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_large_roomimage2()) }}" alt="Norway" class="w3-hover-opacity">
     </div>
 </div>
 <div class="GVE">
@@ -236,7 +242,7 @@
          <div class="w3-container w3-white1">
              {% if image_list %}
              <!--<img src= "{{ url_for('static', filename='thewitches.webp') }}"> -->
-            <img src="{{ url_for('send_image', filename=image_list[movieinfo.get_movie_id()]) }}" alt="Norway" class="w3-hover-opacity">
+            <img src="{{ url_for('send_image', filename= movieinfo.get_movieimage()) }}" alt="Norway" class="w3-hover-opacity">
              {% endif %}
          </div>
         <div class="w3-container w3-white2">
@@ -299,7 +305,12 @@
                     <div class="Tag"> Action </div>
                 {% else %}
                 {% endif %}
-                <p><a href=/Purchase/{{movieinfo.get_movie_id()}}><button class="purchase"> Buy Now! </button></a></p>
+<!--            <div class="w3-container w3-white3">-->
+<!--                <form action="{{url_for('Purchase', id=movieinfo.get_movie_id())}}" method="POST">-->
+<!--                    <input type="submit" value="Buy Now!" class="btn btn-outline-warning">-->
+<!--                </form>-->
+<!--            </div>-->
+            <p><a href=/Purchase/{{movieinfo.get_movie_id()}}><button class="purchase"> Buy Now! </button></a></p>
             </div>
         </div>
 <!--        {% for userinfo in userinfo_list %}-->
