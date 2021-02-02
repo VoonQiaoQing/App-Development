@@ -2,10 +2,25 @@
 {% block title %}Retrieve Reviews{% endblock %}
 
 {% block content %}
-<h1 class="display-4">Retrieve Reviews</h1>
 
+<style>
+  * {
+background-color: black;
+}
+</style>
+
+<h1 style="color:gold" class="display-4">Retrieve Reviews</h1>
 <div>
-  <table class="table table-striped">
+  {% if count == 0 %}
+  <p style="color:gold">There are no reviews.</p>
+  {% elif count == 1 %}
+  <p style="color:gold">There is 1 review.</p>
+  {% else %}
+  <p style="color:gold">There are {{ reviewcount }} reviews.</p>
+  {% endif %}
+</div>
+<div>
+  <table style="color:gold;text-align:center" class="table table-striped">
     <thead>
       <tr>
         <th>Rating</th>
@@ -17,9 +32,16 @@
       <tr>
         <td>{{ user.get_rating() }}</td>
         <td>{{ user.get_review() }}</td>
+        <td><a href="/updateReview/{{user.get_user_id()}}" class="btn btn-warning">Update</a></td>
+        <td>
+          <form action="{{url_for('delete_user', id=user.get_user_id())}}" method="POST">
+           <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{user.get_rating()}} {{user.get_review()}}?');">
+          </form>
+        </td>
       </tr>
     {% endfor %}
     </tbody>
   </table>
 </div>
 {% endblock %}
+
