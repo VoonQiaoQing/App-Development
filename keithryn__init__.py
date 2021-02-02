@@ -84,8 +84,8 @@ def update_review(id):
         return render_template('updateReview.html', form=update_user_form)
 
 
-@app.route('/deleteUser/<int:id>', methods=['POST'])
-def delete_user(id):
+@app.route('/deleteReview/<int:id>', methods=['POST'])
+def delete_review(id):
     users_dict = {}
     db = shelve.open('storage.db', 'w')
     users_dict = db['Users']
