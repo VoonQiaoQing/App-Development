@@ -12,6 +12,17 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
+    available_dict = {}
+    db = shelve.open('storage.db','c')
+    try:
+        available_dict = db['Available']
+    except:
+        print('Error in retrieving form from admin_location.db')
+    available = booking.Left(5,5,5)
+    DTL = booking.Booking('20Jan','9am','Bishan')
+    available_dict[DTL] = available
+    db['Available'] = available_dict
+    db.close()
     return render_template('home.html')
 @app.route('/Movies')
 def movies():
@@ -162,6 +173,7 @@ def updatetime(id):
 # for staff to enter the
 @app.route('/code',methods=['GET', 'POST'])
 def code():
+
     code_form = Code(request.form)
     if request.method == 'POST' and code_form.validate():
         code_dict = {}
@@ -177,7 +189,6 @@ def code():
         db.close()
         return redirect(url_for('retrieve'))
     return render_template('code.html',form=code_form)
-
 @app.route('/retrieve')
 def retrieve():
     code_dict = {}
@@ -385,6 +396,51 @@ def roomtype(id):
         promocode_dict[promo.get_Id()] = promo
         db['Promo'] = promocode_dict
         db.close()
+        available_dict = {}
+        db = shelve.open('storage.db','w')
+        try:
+            available_dict = db['Available']
+        except:
+            print('Error in retrieving form from admin_location.db')
+        available_keys = []
+        for i in available_dict.keys():
+            available_keys.append(i)
+        for x in available_keys:
+            if x.get_location() == purchase_dict.get(1).get_location() and x.get_Time() == purchase_dict.get(1).get_Time() and x.get_Date() == purchase_dict.get(1).get_Date():
+                if roomtype_form.roomtype.data == 'Small':
+                    s = booking.Minus(available_dict.get(x).get_small_left())
+                    left = booking.Left(s.get_minus(),available_dict.get(x).get_medium_left(),available_dict.get(x).get_big_left())
+                    available_dict[purchase_dict.get(1)] =left
+                    db['Available'] = available_dict
+
+                elif roomtype_form.roomtype.data == 'Medium':
+                    m = booking.Minus(available_dict.get(x).get_medium_left())
+                    left = booking.Left(available_dict.get(x).get_small_left(),m.get_minus(),available_dict.get(x).get_big_left())
+                    available_dict[purchase_dict.get(1)] =left
+                    db['Available'] = available_dict
+
+                elif roomtype_form.roomtype.data == 'Big':
+                    b = booking.Minus(available_dict.get(x).get_big_left())
+                    left = booking.Left(available_dict.get(x).get_small_left(),available_dict.get(x).get_medium_left(),b.get_minus())
+                    available_dict[purchase_dict.get(1)] =left
+                    db['Available'] = available_dict
+            #
+            # else:
+            #     if roomtype_form.roomtype.data == 'Small':
+            #         left = booking.Left(4,5,5)
+            #         available_dict[purchase_dict.get(1)] =left
+            #         db['Available'] = available_dict
+            #
+            #     elif roomtype_form.roomtype.data == 'Medium':
+            #         left = booking.Left(5,4,5)
+            #         available_dict[purchase_dict.get(1)] =left
+            #         db['Available'] = available_dict
+            #
+            #     elif roomtype_form.roomtype.data == 'Big':
+            #         left = booking.Left(5,5,4)
+            #         available_dict[purchase_dict.get(1)] =left
+            #         db['Available'] = available_dict
+        db.close()
         return redirect(url_for('checkout'))
     # try:
     #     roomtype_dict = {}
@@ -409,11 +465,18 @@ def roomtype(id):
     #                     elif k.get_roomtype() == 'Big':
     #                         big_left += 1
     # except IOError:
-    small_left = 0
-    medium_left =0
-    big_left = 0
-
-    room = booking.Left(small_left, medium_left, big_left)
+    available_dict = {}
+    db = shelve.open('storage.db','r')
+    available_dict =db['Available']
+    db.close()
+    available_keys = []
+    for i in available_dict.keys():
+        available_keys.append(i)
+    for x in available_keys:
+        if x.get_location() == purchase_dict.get(1).get_location() and x.get_Time() == purchase_dict.get(1).get_Time() and x.get_Date() == purchase_dict.get(1).get_Date():
+            room = booking.Left(available_dict.get(x).get_small_left(),available_dict.get(x).get_medium_left(),available_dict.get(x).get_big_left())
+        # else:
+        #     room = booking.Left(5,5,5)
     return render_template('roomtype.html',room=room, form=roomtype_form, purchase_list=purchase_list, movie=movie)
 @app.route('/promocode')
 def promocode():
@@ -458,13 +521,13 @@ def checkout():
                     discount = 100 - y.get_medium_discount()
                     price = 32 * discount/100
                 else:
-                    price = 20
+                    price = 32
             elif x.get_roomtype() == 'Big':
-                if x.get_promocode() == y.get_Big_code():
+                if x.get_promocode() == y.get_big_code():
                     discount = 100 - y.get_big_discount()
                     price = 42 * discount/100
                 else:
-                    price = 20
+                    price = 42
 
     purchase_dict = {}
     db = shelve.open('storage.db', 'r')
@@ -502,23 +565,6 @@ def checkout():
         return redirect(url_for('booked'))
     return render_template('checkout.html',price =price, room_type=room_type, form=checkout_form, room=room_list)
 
-    # booked_dict = {}
-    # db = shelve.open('booked.db', 'c')
-    # try:
-    #     booked_dict = db['Booked']
-    # except:
-    #     print("Error in retrieving form from booked.db .")
-    #     last = 0
-    #     new = 1
-    #     if len(purchase_dict) == 0:
-    #         new = 1
-    #     else:
-    #         last = list(purchase_dict.keys())[-1]
-    #         new = last + 1
-    #     booked = booking.Booked(new,booked_dict.get(purchase_dict.get(1)).get_moviename(),purchase_dict.get(1).get_Date(),purchase_dict.get(1).get_Time(),purchase_dict.get(1).get_location(),roomtype_dict.get(purchase_dict.get(1)).get_roomtype())
-    #     booked_dict[booked.get_customerid()] = booked
-    #     db['Booked'] = booked_dict
-    #     db.close()
 @app.route('/booked')
 def booked():
     purchase_dict = {}
