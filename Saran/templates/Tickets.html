@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My Ticket{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+</style>
+</head>
+
+<body>
+
+{% extends "base.html" %}
+<style>
+ body{
+  background:#333333;
+  color:#fff;
+}
+</style>
+{% block content %}
+<h1 class="display-4">My Ticket</h1>
+<div>
+
+  {% if count == 0 %}
+  <p>You have not Purchased any room</p>
+  {% elif count == 1 %}
+  <p>You have Purchased one Room</p>
+{% else %}
+  <p>You have Purchased {{ count }} Rooms.</p>
+  {% endif %}
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>MOVIE NAME</th>
+        <th>TIME</th>
+        <th>DATE</th>
+        <th>LOCATION</th>
+        <th>ROOM TYPE</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for i in purchase_list %}
+      <tr>
+        <td>{{ i.get_customerid() }}</td>
+          <td>{{ i.get_moviename() }}</td>
+        <td>{{ i.get_Time() }}</td>
+        <td>{{ i.get_Date() }}</td>
+        <td>{{ i.get_location() }}</td>
+       <td>{{ i.get_roomtype() }}</td>
+        <td><a href="/view/{{i.get_customerid()}}" class="btn btn-warning">View</a></td>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
