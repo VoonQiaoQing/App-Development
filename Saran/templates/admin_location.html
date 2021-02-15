@@ -1,5 +1,11 @@
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
+<style>
+ body{
+  background:#333333;
+  color:#fff;
+}
+</style>
 <form method="POST" action="">
 
     <h3> Enter the location</h3>
@@ -8,7 +14,7 @@
     <p>{{ render_field(form.location3) }}</p>
     <p>{{ render_field(form.location4) }}</p>
     <p>{{ render_field(form.location5) }}</p>
-    <input type="submit" value="Summit" class="btn btn-primary"/>
+    <input type="submit" value="Submit" class="btn btn-primary"/>
 
 </form>
 {% endblock %}

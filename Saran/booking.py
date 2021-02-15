@@ -113,3 +113,59 @@ class Left:
         return self.__medium_left
      def get_big_left(self):
         return self.__big_left
+class Code:
+     def __init__(self,Id,small_code,medium_code,big_code,small_discount,medium_discount,big_discount):
+         self.__small_code = small_code
+         self.__medium_code = medium_code
+         self.__big_code = big_code
+         self.__small_discount = small_discount
+         self.__medium_discount = medium_discount
+         self.__big_discount = big_discount
+         self.__Id =Id
+     def set_Id(self,Id):
+        self.__Id = Id
+     def set_small_code(self,small_code):
+        self.__small_code = small_code
+     def medium_code(self, medium_code):
+        self.__medium_code = medium_code
+     def set_big_code(self, big_code):
+        self.__big_code = big_code
+     def set_small_discount(self,small_discount):
+        self.__small_discount = small_discount
+     def medium_discount(self, medium_discount):
+        self.__medium_discount = medium_discount
+     def set_big_discount(self, big_discount):
+        self.__big_discount = big_discount
+
+     def get_small_discount(self):
+        return self.__small_discount
+     def get_medium_discount(self):
+        return self.__medium_discount
+     def get_big_discount(self):
+        return self.__big_discount
+     def get_Id(self):
+        return self.__Id
+     def get_small_code(self):
+        return self.__small_code
+     def get_medium_code(self):
+        return self.__medium_code
+     def get_big_code(self):
+        return self.__big_code
+class Promocode:
+    def __init__(self,Id,promocode,roomtype):
+        self.__Id =Id
+        self.__promocode = promocode
+        self.__roomtype = roomtype
+
+    def set_Id(self,Id):
+        self.__Id = Id
+    def set_roomtype(self,roomtype):
+        self.__roomtype = roomtype
+    def set_promocode(self,promocode):
+        self.__promocode = promocode
+    def get_Id(self):
+        return self.__Id
+    def get_promocode(self):
+        return self.__promocode
+    def get_roomtype(self):
+        return self.__roomtype

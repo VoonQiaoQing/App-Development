@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<style>
+ body{
+  background:#333333;
+  color:#fff;
+}
+</style>
+<form method="POST" action="">
+
+    <h3 style="color:#FDD017"> Enter the Code and the Discount Percent</h3>
+    <h4>     Codes for Room                    /           Discount Percent</h4>
+    <p>{{ render_field(form.small_code) }} {{ render_field(form.small_discount) }}</p>
+    <p>{{ render_field(form.medium_code) }} {{ render_field(form.medium_discount) }}</p>
+    <p>{{ render_field(form.big_code) }} {{ render_field(form.big_discount) }}</p>
+    <input type="submit" value="Submit" class="btn btn-primary"/>
+</form>
+{% endblock %}

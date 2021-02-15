@@ -21,8 +21,15 @@ class Add_time(Form):
     time4 = StringField('Time 4:', [validators.Length(min=1, max=150), validators.DataRequired()])
     time5 = StringField('Time 5:', [validators.Length(min=1, max=150), validators.DataRequired()])
 class Roomtype(Form):
+    promocode = StringField('',render_kw={"placeholder": "e.g. Room2018"})
     roomtype = SelectField('',[validators.DataRequired()], choices=[('Small'), ('Medium'), ('Big')])
-
+class Code(Form):
+    small_code = StringField('',[validators.DataRequired()],render_kw={"placeholder": "Small Room Code"} )
+    medium_code = StringField('',[validators.DataRequired()],render_kw={"placeholder": "Medium Room Code"})
+    big_code = StringField('', [validators.DataRequired()],render_kw={"placeholder": "Big Room Code"})
+    small_discount = IntegerField('',[validators.DataRequired()],render_kw={"placeholder": "eg.20, which is 20%"})
+    medium_discount = IntegerField('',[ validators.DataRequired()],render_kw={"placeholder": "eg.20, which is 20%"})
+    big_discount = IntegerField('',[ validators.DataRequired()],render_kw={"placeholder": "eg.20, which is 20%"})
 # class LoginForm(Form):
 #
 #     email = StringField("Email", validators=[validators.Length(min=7, max=50), validators.DataRequired(message="Please Fill This Field")])

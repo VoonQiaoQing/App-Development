@@ -1,8 +1,7 @@
 import shelve, payment, booking,random,string
 from flask import Flask, render_template, request, redirect, url_for, session
 from EditMovies import CreateMoviesForm
-from EditRooms import CreateRoomsForm
-from Forms import Purchase, Add_time, Add_location, Roomtype
+from Forms import Purchase, Add_time, Add_location, Roomtype, Code
 from checkoutform import Checkout
 import rooms as rooms
 import roomLoactionCapacity as room
@@ -120,6 +119,7 @@ def retrieve_time():
         admin = add_time_dict.get(key)
         add_time_list.append(admin)
     return render_template('retrieve_time.html', count=len(add_time_list), add_time_list=add_time_list)
+
 @app.route('/updatetime/<int:id>/', methods=['GET', 'POST'])
 def updatetime(id):
     update_time_form = Add_time(request.form)
@@ -158,7 +158,67 @@ def updatetime(id):
 #     db['Time'] = time_dict
 #     db.close()
 #     return redirect(url_for('retrieve_time'))
-#
+
+# for staff to enter the
+@app.route('/code',methods=['GET', 'POST'])
+def code():
+    code_form = Code(request.form)
+    if request.method == 'POST' and code_form.validate():
+        code_dict = {}
+        db = shelve.open('storage.db', 'c')
+        try:
+            code_dict = db['Code']
+        except:
+            print('Error in retrieving form from admin_location.db')
+
+        add_code = booking.Code(1,code_form.small_code.data, code_form.medium_code.data,  code_form.big_code.data, code_form.small_discount.data, code_form.medium_discount.data,code_form.big_discount.data)
+        code_dict[add_code.get_Id()] = add_code
+        db['Code'] = code_dict
+        db.close()
+        return redirect(url_for('retrieve'))
+    return render_template('code.html',form=code_form)
+
+@app.route('/retrieve')
+def retrieve():
+    code_dict = {}
+    db = shelve.open('storage.db','r' )
+    code_dict = db['Code']
+    db.close()
+    code_list = []
+    for key in code_dict:
+        admin = code_dict.get(key)
+        code_list.append(admin)
+    return render_template('retrieve.html', code_list=code_list)
+@app.route('/updatecode/<int:id>/', methods=['GET', 'POST'])
+def updatecode(id):
+    update_code_form = Code(request.form)
+    if request.method == 'POST' and update_code_form.validate():
+        code_dict = {}
+        db = shelve.open('storage.db', 'w')
+        code_dict = db['Code']
+        code = code_dict.get(id)
+        code.set_small_code(update_code_form.small_code.data)
+        code.set_medium_code(update_code_form.medium_code.data)
+        code.set_big_code(update_code_form.big_code.data)
+        code.set_small_discount(update_code_form.small_discount.data)
+        code.set_medium_discount(update_code_form.medium_discount.data)
+        code.set_big_discount(update_code_form.big_discount.data)
+        db['Code'] = code_dict
+        db.close()
+        return redirect(url_for('retrieve'))
+    else:
+        code_dict = {}
+        db = shelve.open('storage.db', 'r')
+        code_dict = db['Code']
+        db.close()
+        code = code_dict.get(id)
+        update_code_form.small_code.data = code.get_small_code()
+        update_code_form.medium_code.data = code.get_medium_code()
+        update_code_form.big_code.data = code.get_big_code()
+        update_code_form.small_discount.data = code.get_small_discount()
+        update_code_form.medium_discount.data = code.get_medium_discount()
+        update_code_form.big_discount.data = code.get_big_discount()
+        return render_template('updatecode.html', form=update_code_form)
 
 
 
@@ -239,9 +299,8 @@ def purchase(id):
 
 
 
-
-@app.route('/roomtype', methods=['GET', 'POST'])
-def roomtype():
+@app.route('/roomtype/<int:id>/', methods=['GET', 'POST'])
+def roomtype(id):
     global movie, moviename
     if id == 1:
         movie = movieinfo.MovieInfo("\'demonslayer.web\'",'Demon Slayer', 'PG13: Some Coarese Language','116mins' )
@@ -315,8 +374,18 @@ def roomtype():
         roomtype_dict[type.get_num()] = type
         room['Roomtype'] = roomtype_dict
         room.close()
+        promocode_dict = {}
+        db = shelve.open('storage.db', 'c')
+        try:
+            promocode_dict = db['Promo']
+        except:
+            print("Error in retrieving form from storage.db.")
+        num = 1
+        promo = booking.Promocode(num,roomtype_form.promocode.data,roomtype_form.roomtype.data)
+        promocode_dict[promo.get_Id()] = promo
+        db['Promo'] = promocode_dict
+        db.close()
         return redirect(url_for('checkout'))
-
     # try:
     #     roomtype_dict = {}
     #     db = shelve.open('storage.db','r')
@@ -331,7 +400,8 @@ def roomtype():
     #         big_left = 0
     #         for k in room_list:
     #             for i in purchase_list:
-    #                 if i.get_location() == k.get_location() and i.get_Time() == k.get_Time() and i.get_Date() == k.get_Date():
+    #                 if i.get_location() == k.get_location() and i.get_Time() == k.get_Time()
+    #                 and i.get_Date() == k.get_Date():
     #                     if k.get_roomtype() == 'Small':
     #                         small_left += 1
     #                     elif k.get_roomtype() == 'Medium':
@@ -345,10 +415,57 @@ def roomtype():
 
     room = booking.Left(small_left, medium_left, big_left)
     return render_template('roomtype.html',room=room, form=roomtype_form, purchase_list=purchase_list, movie=movie)
-
-
+@app.route('/promocode')
+def promocode():
+    code_dict = {}
+    db = shelve.open('storage.db','r' )
+    code_dict = db['Code']
+    db.close()
+    code_list = []
+    for key in code_dict:
+        admin = code_dict.get(key)
+        code_list.append(admin)
+    return render_template('promocode.html',code_list=code_list)
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
+    code_dict = {}
+    db = shelve.open('storage.db','r' )
+    code_dict = db['Code']
+    db.close()
+    code_list = []
+    for key in code_dict:
+        admin = code_dict.get(key)
+        code_list.append(admin)
+    promocode_dict = {}
+    db = shelve.open('storage.db','r' )
+    promocode_dict = db['Promo']
+    db.close()
+    promocode_list = []
+    for key in promocode_dict:
+        c = promocode_dict.get(key)
+        promocode_list.append(c)
+    for x in promocode_list:
+        for y in code_list:
+            if x.get_roomtype() == 'Small':
+                if x.get_promocode() == y.get_small_code():
+                    # for the int replace wif get_small_price()
+                    discount = 100 - y.get_small_discount()
+                    price = 20 * discount/100
+                else:
+                    price = 20
+            elif x.get_roomtype() == 'Medium':
+                if x.get_promocode() == y.get_medium_code():
+                    discount = 100 - y.get_medium_discount()
+                    price = 32 * discount/100
+                else:
+                    price = 20
+            elif x.get_roomtype() == 'Big':
+                if x.get_promocode() == y.get_Big_code():
+                    discount = 100 - y.get_big_discount()
+                    price = 42 * discount/100
+                else:
+                    price = 20
+
     purchase_dict = {}
     db = shelve.open('storage.db', 'r')
     purchase_dict = db['Purchase']
@@ -383,7 +500,7 @@ def checkout():
         db['Checkout'] = checkout_dict
         db.close()
         return redirect(url_for('booked'))
-    return render_template('checkout.html',room_type=room_type, form=checkout_form, room=room_list)
+    return render_template('checkout.html',price =price, room_type=room_type, form=checkout_form, room=room_list)
 
     # booked_dict = {}
     # db = shelve.open('booked.db', 'c')
@@ -481,69 +598,69 @@ def view(id):
         ref = booked.get_ref()
         return render_template('view.html',ref=ref,movie=movie, booked=booked,Date=Date,Time=Time,location=Location,roomtype=roomtype)
 
-@app.route('/MoviesStaff')
-def moviesstaff():
-    return render_template('moviesstaff.html')
-
-
-@app.route('/staffeditrooms', methods=['GET', 'POST'])
-def staffeditrooms():
-    create_staff_roomform = CreateRoomsForm(request.form)
-    if request.method == 'POST' and create_staff_roomform.validate():
-
-        staff_dict = {}
-        db = shelve.open('storage.db', 'w')
-        db['Staff'] = staff_dict
-
-        #        staff = MoviesStaff.MoviesStaff(create_staff_roomform.room_title.data,
-        #                                        create_staff_roomform.small_roominfo.data,
-        #                                        create_staff_roomform.med_roominfo.data,
-        #                                        create_staff_roomform.large_roominfo.data,
-        #                                        )
-
-        staff = staff_dict.get(id)
-        staff.set_roomtitle(create_staff_roomform.room_title.data)
-        staff.set_small_roominfo(create_staff_roomform.small_roominfo.data)
-        staff.set_med_roominfo(create_staff_roomform.med_roominfo.data)
-        staff.set_large_roominfo(create_staff_roomform.large_roominfo.data)
-
-        #        staff_dict[staff.get_staff_id()] = staff
-        db['Staff'] = staff_dict
-
-        # Test codes
-        #        staff_dict = db['Staff']
-        #        staff = staff_dict[staff.get_staff_id()]
-        #        print("was stored in storage.db successfully with user_id ==", staff.get_user_id())
-
-        db.close()
-
-        return redirect(url_for('home'))
-    else:
-        staff_dict = {}
-        db = shelve.open('storage.db', 'r')
-        db['Staff'] = staff_dict
-        db.close()
-
-        staff = staff_dict.get(id)
-        create_staff_roomform.room_title.data = staff.get_roomtitle()
-        create_staff_roomform.small_roominfo.data = staff.get_small_roominfo()
-        create_staff_roomform.med_roominfo.data = staff.get_med_roominfo()
-        create_staff_roomform.large_roominfo.data = staff.get_large_roominfo()
-
-        staff_list = []
-        for key in staff_dict:
-            staff = staff_dict.get(key)
-            staff_list.append(staff)
-
-        return render_template('editRooms.html', form=create_staff_roomform, staff_list=staff_list)
-
-
-@app.route('/staffeditmovies', methods=['GET', 'POST'])
-def staffeditmovies():
-    create_user_form2 = CreateMoviesForm(request.form)
-    if request.method == 'POST' and create_user_form2.validate():
-        return redirect(url_for('home'))
-    return render_template('editMovies.html', form=create_user_form2)
+# @app.route('/MoviesStaff')
+# def moviesstaff():
+#     return render_template('moviesstaff.html')
+#
+#
+# @app.route('/staffeditrooms', methods=['GET', 'POST'])
+# def staffeditrooms():
+#     create_staff_roomform = CreateRoomsForm(request.form)
+#     if request.method == 'POST' and create_staff_roomform.validate():
+#
+#         staff_dict = {}
+#         db = shelve.open('storage.db', 'w')
+#         db['Staff'] = staff_dict
+#
+#         #        staff = MoviesStaff.MoviesStaff(create_staff_roomform.room_title.data,
+#         #                                        create_staff_roomform.small_roominfo.data,
+#         #                                        create_staff_roomform.med_roominfo.data,
+#         #                                        create_staff_roomform.large_roominfo.data,
+#         #                                        )
+#
+#         staff = staff_dict.get(id)
+#         staff.set_roomtitle(create_staff_roomform.room_title.data)
+#         staff.set_small_roominfo(create_staff_roomform.small_roominfo.data)
+#         staff.set_med_roominfo(create_staff_roomform.med_roominfo.data)
+#         staff.set_large_roominfo(create_staff_roomform.large_roominfo.data)
+#
+#         #        staff_dict[staff.get_staff_id()] = staff
+#         db['Staff'] = staff_dict
+#
+#         # Test codes
+#         #        staff_dict = db['Staff']
+#         #        staff = staff_dict[staff.get_staff_id()]
+#         #        print("was stored in storage.db successfully with user_id ==", staff.get_user_id())
+#
+#         db.close()
+#
+#         return redirect(url_for('home'))
+#     else:
+#         staff_dict = {}
+#         db = shelve.open('storage.db', 'r')
+#         db['Staff'] = staff_dict
+#         db.close()
+#
+#         staff = staff_dict.get(id)
+#         create_staff_roomform.room_title.data = staff.get_roomtitle()
+#         create_staff_roomform.small_roominfo.data = staff.get_small_roominfo()
+#         create_staff_roomform.med_roominfo.data = staff.get_med_roominfo()
+#         create_staff_roomform.large_roominfo.data = staff.get_large_roominfo()
+#
+#         staff_list = []
+#         for key in staff_dict:
+#             staff = staff_dict.get(key)
+#             staff_list.append(staff)
+#
+#         return render_template('editRooms.html', form=create_staff_roomform, staff_list=staff_list)
+#
+#
+# @app.route('/staffeditmovies', methods=['GET', 'POST'])
+# def staffeditmovies():
+#     create_user_form2 = CreateMoviesForm(request.form)
+#     if request.method == 'POST' and create_user_form2.validate():
+#         return redirect(url_for('home'))
+#     return render_template('editMovies.html', form=create_user_form2)
 
 
 @app.route('/contactUs')

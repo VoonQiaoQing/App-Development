@@ -235,13 +235,9 @@ label {
     <div id="shadow"></div>
     <div id="image-container">
       <span id="amount">paying:
-          {% if room_type == 'Small' %}
-          <strong>$28</strong>
-          {% elif room_type == 'Medium' %}
-          <strong>$40</strong>
-          {% elif room_type == 'Big' %}
-          <strong>$52</strong>
-          {% endif %}
+
+          <strong>${{ price }}</strong>
+
       </span>
   </div>
       <div class ='card'>

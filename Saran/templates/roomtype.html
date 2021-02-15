@@ -178,13 +178,17 @@ ol li a{color:#fff;}
 
     <tr>
       <th scope="col">Roomtype</th>
-        <th> </th>
+        <th>Promo</th>
+        <th>Available Promo Code</th>
+        <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>{{render_field(form.roomtype)}}</td>
-      <td> <input type="submit" value="Submit" class="btn btn-primary"/></td>
+        <td>{{render_field(form.promocode)}}</td>
+        <th> <a href="/promocode"><button type="button" class="btn btn-info">My Promo Code</button></a></th>
+      <td><input type="submit" value="Submit" class="btn btn-primary"/></td>
     </tr>
   </tbody>
 </table>
