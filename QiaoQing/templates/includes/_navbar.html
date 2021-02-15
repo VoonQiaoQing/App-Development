@@ -1,0 +1,239 @@
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+
+* {
+  list-style: none;
+}
+
+p {
+  font-size: 13px;
+}
+
+div.navbar-nav {
+  padding-left: 390px;
+  width: 825px;
+  height: 105px;
+}
+
+div.contactus {
+  padding-left: 10px;
+  width: 200px;
+  height: 150px;
+  float: left;
+}
+
+div.clock {
+  padding-left: 10px;
+  text-align: center;
+  width: 190px;
+  height: 105x;
+  float: left;
+}
+
+#canvas {
+  width: 180px;
+  height: 90px;
+}
+
+#demo {
+  font-size: 12px;
+}
+
+.fa {
+  padding-top: 3px;
+  font-size: 20px;
+  width: 30px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 50%;
+}
+
+.fa-facebook {
+  height: 25px;
+  width: 25px;
+  background: #3B5998;
+  color: white;
+}
+
+.fa-twitter {
+  height: 25px;
+  width: 25px;
+  background: #55ACEE;
+  color: white;
+}
+
+.fa-instagram {
+  height: 25px;
+  width: 25px;
+  background: #ea4c89;
+  color: white;
+}
+
+</style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-sm bg-grey navbar-dark">
+
+<li class="nav-item">
+  {% if 'login' in session %}
+    <a class="navbar-brand" href="/{{ session['login'] }}">
+      <img style="width: 85px;" src= "{{ url_for('static', filename='goldenlogo.png') }}" alt="">
+    Home</a>
+  {% else %}
+    <a class="navbar-brand" href="/">
+      <img style="width: 85px;" src= "{{ url_for('static', filename='goldenlogo.png') }}" alt="">
+    Home</a>
+  {% endif %}
+</li>
+
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      {% if 'login' in session %}
+        <a class="nav-link" href="/MoviesCustomer/{{ session['login'] }}">Movies</a>
+      {% else %}
+        <a class="nav-link" href="/MoviesCustomer/None">Movies</a>
+      {% endif %}
+    </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="" id="navbardrop" data-toggle="dropdown">
+       Help
+      </a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="/createQuestion">Create</a>
+        <a class="dropdown-item" href="/retrieveQuestion">Retrieve</a>
+      </div>
+    </li>
+    {% if 'login' in session %}
+    <li class="nav-item">
+      <a class="nav-link" href="/contactUs/{{ session['login'] }}">Services</a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+      <a class="nav-link" href="/contactUs/None">Services</a>
+    </li>
+    {% endif %}
+
+    {% if 'login' in session %}
+      {% if session['login'] == None %}
+      <li class="Register">
+        <a class="nav-link" href="/register">Register</a>
+      </li>
+      <li class="Login">
+        <a class="nav-link" href="/login">Login</a>
+      </li>
+      {% else %}
+      <li class="Profile">
+        <a class="nav-link" href="/profile">{{ session['loggedIn'] }}'s Profile</a>
+      </li>
+      <li class="Profile">
+        <a class="nav-link" href="/logout">Logout</a>
+      </li>
+      {% endif %}
+    {% endif %}
+
+  </ul>
+  <div class="nav-item">
+    <div class="navbar-nav">
+      <div class="contactus">
+        <p>Contact Us!<br>Number: 63456513/ 64402794<br>Email: gtv@gmail.com</p>
+        <p>Follow Us! <a href="https://www.facebook.com/gvmovieclub" class="fa fa-facebook"></a>
+          <a href="https://twitter.com/GVMovieClub" class="fa fa-twitter"></a>
+          <a href="https://www.instagram.com/gvmovieclub/" class="fa fa-instagram"></a> </p>
+      </div>
+      <div class="clock">
+        <canvas id="canvas" style="background-color:black"></canvas>
+        <p id="demo"></p>
+      </div>
+    </div>
+    </div>
+
+</nav>
+
+<script>
+
+var d = new Date();
+document.getElementById("demo").innerHTML = d.toLocaleString();
+
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+var radius = canvas.height / 2;
+ctx.translate(radius, radius);
+radius = radius * 0.90
+setInterval(drawClock, 1000);
+
+function drawClock() {
+  drawFace(ctx, radius);
+  drawNumbers(ctx, radius);
+  drawTime(ctx, radius);
+}
+
+function drawFace(ctx, radius) {
+  var grad;
+  ctx.beginPath();
+  ctx.arc(0, 0, radius, 0, 2*Math.PI);
+  ctx.fillStyle = 'white';
+  ctx.fill();
+  grad = ctx.createRadialGradient(0,0,radius*0.95, 0,0,radius*1.05);
+  grad.addColorStop(0, '#333');
+  grad.addColorStop(0.5, 'white');
+  grad.addColorStop(1, '#333');
+  ctx.strokeStyle = grad;
+  ctx.lineWidth = radius*0.1;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(0, 0, radius*0.1, 0, 2*Math.PI);
+  ctx.fillStyle = '#333';
+  ctx.fill();
+}
+
+function drawNumbers(ctx, radius) {
+  var ang;
+  var num;
+  ctx.font = radius*0.15 + "px arial";
+  ctx.textBaseline="middle";
+  ctx.textAlign="center";
+  for(num = 1; num < 13; num++){
+    ang = num * Math.PI / 6;
+    ctx.rotate(ang);
+    ctx.translate(0, -radius*0.85);
+    ctx.rotate(-ang);
+    ctx.fillText(num.toString(), 0, 0);
+    ctx.rotate(ang);
+    ctx.translate(0, radius*0.85);
+    ctx.rotate(-ang);
+  }
+}
+
+function drawTime(ctx, radius){
+    var now = new Date();
+    var hour = now.getHours();
+    var minute = now.getMinutes();
+    var second = now.getSeconds();
+    //hour
+    hour=hour%12;
+    hour=(hour*Math.PI/6)+
+    (minute*Math.PI/(6*60))+
+    (second*Math.PI/(360*60));
+    drawHand(ctx, hour, radius*0.5, radius*0.07);
+    //minute
+    minute=(minute*Math.PI/30)+(second*Math.PI/(30*60));
+    drawHand(ctx, minute, radius*0.8, radius*0.07);
+    // second
+    second=(second*Math.PI/30);
+    drawHand(ctx, second, radius*0.9, radius*0.02);
+}
+
+function drawHand(ctx, pos, length, width) {
+    ctx.beginPath();
+    ctx.lineWidth = width;
+    ctx.lineCap = "round";
+    ctx.moveTo(0,0);
+    ctx.rotate(pos);
+    ctx.lineTo(0, -length);
+    ctx.stroke();
+    ctx.rotate(-pos);
+}
+</script>
+</body>

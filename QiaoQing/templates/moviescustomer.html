@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Movies{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+* {
+  background-color: black;
+  color:gold;
+}
+
+.RoomsPricing{
+  padding-top: 5px;
+  padding-right: 5px;
+  padding-bottom: 25px;
+  padding-left: 5px;
+  width: 300px;
+  float: left;
+}
+
+.GVE{
+  padding-top: 5px;
+  padding-right: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  width: 90%;
+  float: left;
+  background-color: gold;
+  border: 1px solid grey;
+}
+
+.GVE h4,.GVE h5 {
+  padding-left: 5px;
+  float: left;
+  color: black;
+  background-color: gold;
+}
+
+.MoviesList{
+  position: relative;
+  padding-top: 5px;
+  padding-right: 5px;
+  padding-bottom: 10px;
+  padding-left: 5px;
+  width: 450px;
+  float: right;
+  border: 1px solid black;
+}
+
+.filter{
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  width: 33%;
+  float: right;
+  border: 1px solid grey;
+}
+
+.FilterOptions{
+  list-style-type: none;
+}
+
+.MoviesList img{
+  width: 190px;
+  height: 285px;
+  float: left;
+}
+
+.w3-container w3-white1 {
+  width: 50%;
+  float: left;
+}
+
+.w3-container w3-white2 {
+  width: 35%;
+  float: left;
+}
+
+.w3-container w3-white3 {
+  width: 15%;
+  float: right;
+}
+
+.MovieTitle {
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+  width: 50%;
+  float: left;
+}
+
+.GVEDiv {
+  padding-right: 10px;
+  padding-left: 10px;
+  width: 50%;
+  float: left;
+}
+
+.GVEanot {
+  padding-right: 10px;
+  padding-left: 10px;
+  width: 125px;
+  color: black;
+  background-color: gold;
+  border: 1px solid grey;
+}
+
+.GenreTags {
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+  width: 50%;
+  float: left;
+}
+
+.Tag {
+  font-size: 12px;
+  width: 75px;
+  padding-right: 10px;
+  float: left;
+  background-color: purple;
+  border: 1px solid gold;
+}
+
+.purchase{
+  float: right;
+  width: 95px;
+  height:40px;
+  border: 1px solid;
+  border-color: gold;
+  color: gold;
+  position: absolute;
+  bottom: 8px;
+  right: 16px;
+}
+
+.purchase:hover, .filter:hover{
+  background-color: gold;
+  color: black;
+}
+
+</style>
+</head>
+
+<body>
+
+{% extends "base.html" %}
+
+{% block content %}
+
+{% for roominfo in roominfo_list %}
+<div class="RoomsPricing">
+
+<h2>{{ roominfo.get_roomtitle() }}</h2>
+
+{% if userid == "1" %}
+    <form action="{{url_for('EditRooms', userid=userid , id=roominfo.get_roomid())}}" method="POST">
+        <input type="submit" value="Edit" class="btn btn-outline-warning">
+    </form>
+{% endif %}
+
+<div class="w3-third w3-container w3-margin-bottom">
+    <div class="w3-container w3-white">
+        <h4>{{ roominfo.get_small_roominfo() }}</h4>
+    </div>
+    <div class="w3-container w3-white">
+        <img style="width: 125px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_small_roomimage1()) }}" alt="Norway" class="w3-hover-opacity">
+        <img style="width: 125px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_small_roomimage2()) }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+</div>
+<div class="w3-third w3-container w3-margin-bottom">
+    <div class="w3-container w3-white">
+        <h4>{{ roominfo.get_med_roominfo() }}</h4>
+    </div>
+    <div class="w3-container w3-white">
+        <img style="width: 265px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_med_roomimage()) }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+</div>
+<div class="w3-third w3-container w3-margin-bottom">
+    <div class="w3-container w3-white">
+        <h4>{{ roominfo.get_large_roominfo() }}</h4>
+    </div>
+    <div class="w3-container w3-white">
+        <img style="width: 125px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_large_roomimage1()) }}" alt="Norway" class="w3-hover-opacity">
+        <img style="width: 125px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_large_roomimage2()) }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+</div>
+<div class="GVE">
+    <h4>FOR GV EXCLUSIVE</h4>
+    <h5>{{ roominfo.get_gvexclusiveinfo() }}</h5>
+</div>
+</div>
+
+{% endfor %}
+
+<div class="MoviesList">
+<div class="FilterOptions">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="" id="filter" data-toggle="dropdown">
+      Filter
+      </a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="/Filter">Horror</a>
+        <a class="dropdown-item" href="/Filter">Drama</a>
+        <a class="dropdown-item" href="/Filter">Comedy</a>
+        <a class="dropdown-item" href="/Filter">Science</a>
+        <a class="dropdown-item" href="/Filter">Romance</a>
+        <a class="dropdown-item" href="/Filter">Animation</a>
+        <a class="dropdown-item" href="/Filter">CrimeFilm</a>
+        <a class="dropdown-item" href="/Filter">Adventure</a>
+        <a class="dropdown-item" href="/Filter">Emotional</a>
+        <a class="dropdown-item" href="/Filter">Mystery</a>
+        <a class="dropdown-item" href="/Filter">Action</a>
+      </div>
+    </li>
+</div>
+</div>
+
+<div class="MoviesList">
+<h2>Showing Now!</h2>
+<div class="MoviesList">
+  {% if moviecount == 0 %}
+  <p>There are no movies.</p>
+  {% elif moviecount == 1 %}
+  <p>There is 1 movies.</p>
+  {% else %}
+  <p>There are {{ moviecount }} movies.</p>
+  {% endif %}
+</div>
+
+{% if userid == "1" %}
+<form action="{{url_for('ChooseMovies') }}">
+    <input type="submit" value="Edit" class="btn btn-outline-warning">
+</form>
+{% endif %}
+
+</div>
+
+{% for movieinfo in movieinfo_list %}
+    <div class="MoviesList">
+         <div class="w3-container w3-white1">
+             {% if image_list %}
+             <!--<img src= "{{ url_for('static', filename='thewitches.webp') }}"> -->
+            <img src="{{ url_for('send_image', filename= movieinfo.get_movieimage()) }}" alt="Norway" class="w3-hover-opacity">
+             {% endif %}
+         </div>
+        <div class="w3-container w3-white2">
+            <div class="MovieTitle">
+                <h5>{{ movieinfo.get_moviename() }}</h5>
+                <h6>{{ movieinfo.get_movieagerating() }}<br>{{ movieinfo.get_movieduration() }}</h6>
+            </div>
+            <div class="GVEDiv">
+                {% if movieinfo.get_gvexclusivetag() == True %}
+                <div class="GVEanot">GV EXCLUSIVE</div>
+                {% else %}
+                {% endif %}
+            </div>
+            <div class="GenreTags">
+                {% if movieinfo.get_movieHorror() == True %}
+                    <div class="Tag"> Horror </div>
+                {% else %}
+                {% endif %}
+                {% if movieinfo.get_movieDrama() == True %}
+                    <div class="Tag"> Drama </div>
+                {% else %}
+                {% endif %}
+                {% if movieinfo.get_movieScience() == True %}
+                    <div class="Tag"> Science </div>
+                {% else %}
+                {% endif %}
+                {% if movieinfo.get_movieComedy() == True %}
+                    <div class="Tag"> Comedy </div>
+                {% else %}
+                {% endif %}
+                {% if movieinfo.get_movieRomance() == True %}
+                    <div class="Tag"> Romance </div>
+                {% else %}
+                {% endif %}
+                {% if movieinfo.get_movieAnimation() == True %}
+                    <div class="Tag"> Animation </div>
+                {% else %}
+                {% endif %}
+                {% if movieinfo.get_movieCrimeFilm() == True %}
+                    <div class="Tag"> Crime Film </div>
+                {% else %}
+                {% endif %}
+                {% if movieinfo.get_movieThriller() == True %}
+                    <div class="Tag"> Thriller </div>
+                {% else %}
+                {% endif %}
+                {% if movieinfo.get_movieAdventure() == True %}
+                    <div class="Tag"> Adventure </div>
+                {% else %}
+                {% endif %}
+                {% if movieinfo.get_movieEmotional() == True %}
+                    <div class="Tag"> Emotional </div>
+                {% else %}
+                {% endif %}
+                {% if movieinfo.get_movieMystery() == True %}
+                    <div class="Tag"> Mystery </div>
+                {% else %}
+                {% endif %}
+                {% if movieinfo.get_movieAction() == True %}
+                    <div class="Tag"> Action </div>
+                {% else %}
+                {% endif %}
+
+            {% if 'login' in session %}
+                {% if userid != None %}
+                    {% if userid == "1" %}
+                    {% else %}
+                    <p><a href="/Purchase/{{ session['login'] }}/{{movieinfo.get_movie_id()}}"><button class="purchase"> Buy Now! </button></a></p>
+                    {% endif %}
+                {% else %}
+                <p><a href=/login><button class="purchase"> Buy Now! </button></a></p>
+                {% endif %}
+            {% else %}
+                <p><a href=/login><button class="purchase"> Buy Now! </button></a></p>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}
+</body>
+</html>

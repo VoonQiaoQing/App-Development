@@ -1,0 +1,72 @@
+<style>
+* {
+  background-color: black;
+  color:white;
+}
+
+div.submit {
+  padding-top: 50px;
+}
+
+div.blackblock {
+  background-color: black;
+  width: 350px;
+  height: 130px;
+}
+</style>
+
+{% extends "base.html" %}
+{% block title %}Edit Newest Releases{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<h1 class="display-4">Edit Newest Releases</h1>
+
+<form method="POST" action="" name="" enctype="multipart/form-data">
+  <div class="form-group">
+  <h5>Newest Release Image 1</h5>
+  {{ form.release_image1 }}
+  </div>
+
+  <div class="form-group">
+    {{ render_field(form.release_name1, class="form-control") }}
+  </div>
+
+  <div class="form-group">
+  <h5>Newest Release Image 2</h5>
+  {{ form.release_image2 }}
+  </div>
+
+  <div class="form-group">
+    {{ render_field(form.release_name2, class="form-control") }}
+  </div>
+
+  <div class="form-group">
+  <h5>Newest Release Image 3</h5>
+  {{ form.release_image3 }}
+  </div>
+
+  <div class="form-group">
+    {{ render_field(form.release_name3, class="form-control") }}
+  </div>
+
+  <div class="form-group">
+  <h5>Newest Release Image 4</h5>
+  {{ form.release_image4 }}
+  </div>
+
+  <div class="form-group">
+    {{ render_field(form.release_name4, class="form-control") }}
+  </div>
+
+  <div class="submit">
+  <input type="submit">
+  </div>
+
+  <div class="blackblock">
+  </div>
+
+</form>
+{% endblock %}
+

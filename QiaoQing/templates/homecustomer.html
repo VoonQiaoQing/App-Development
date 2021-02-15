@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Home{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+* {
+  background-color: black;
+  color:gold;
+}
+
+div.footer {
+    font-size: 10px;
+}
+
+div.homedescription {
+  position: absolute;
+  top: 165px;
+  left: auto;
+  height: 490px;
+  width: 275px;
+  border: 1px solid white;
+}
+
+div.homeimageandpolicy {
+  position: absolute;
+  top: 165px;
+  left: 310px;
+  height: 490px;
+  width: 750px;
+}
+
+div.moviescomingsoon {
+  position: absolute;
+  padding-left: 25px;
+  padding-top: 10px;
+  top: 165px;
+  left: 1050px;
+  height: 490px;
+  width: 350px;
+  border: 1px solid white;
+}
+
+div.homeimage {
+  width: 715px;
+  height: 310px;
+}
+
+div.homeimagedes {
+  padding: 5px;
+  width: 710px;
+  height: 40px;
+}
+
+div.homepolicy {
+  width: 710px;
+  height: 135px;
+}
+
+div.comingsoontitle {
+  text-align: center;
+  padding: 10px;
+}
+
+div.comingsoon1 {
+  text-align: center;
+  padding: 10px;
+  float: left;
+  width: 150px;
+  height: 195px;
+}
+
+div.comingsoon2 {
+  text-align: center;
+  padding: 10px;
+  float: left;
+  width: 150px;
+  height: 195px;
+}
+
+div.comingsoon3 {
+  text-align: center;
+  padding: 10px;
+  float: left;
+  width: 150px;
+  height: 195px;
+}
+
+div.comingsoon4 {
+  text-align: center;
+  padding: 10px;
+  float: left;
+  width: 150px;
+  height: 195px;
+}
+
+div.homecontentedit1 {
+  padding-top: 425px;
+  padding-left: 220px;
+}
+
+div.homecontentedit2 {
+  padding-right: 75px;
+  float: right;
+}
+
+div.homecontentedit3 {
+  padding-top: 395px;
+  padding-left: 270px;
+}
+
+</style>
+</head>
+
+<body>
+
+{% extends "base.html" %}
+
+{% block content %}
+{% if 'login' in session %}
+<div class="alert alert-success alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ session['loggedIn'] }} has login.
+</div>
+{% endif %}
+
+{% for homedescription in homedescription_list %}
+<div class="homedescription">
+    <div class="homecontent">
+        {{ homedescription.get_homedescription() }}
+    </div>
+
+{% if userid == "1" %}
+<div class="homecontentedit1">
+    <form action="{{url_for('EditHomeDescription', userid=userid, homeid=homedescription.get_homeid() )}}" method="POST">
+        <input type="submit" value="Edit" class="btn btn-outline-warning">
+    </form>
+</div>
+{% endif %}
+
+</div>
+{% endfor %}
+
+{% for homeimage in homeimage_list %}
+<div class="homeimageandpolicy">
+    <div class="homeimage">
+        <img style="width: 715px; height: 310px;" src="{{ url_for('send_image', filename= homeimage.get_homeimage()) }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+    <div class="homeimagedes">
+        {{ homeimage.get_homepolicy() }}
+        {% if userid == "1" %}
+            <div class="homecontentedit2">
+                <form action="{{url_for('EditHomeImage', userid=userid ,homeid=homeimage.get_homeid()) }}" method="POST">
+                    <input type="submit" value="Edit" class="btn btn-outline-warning">
+                </form>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="homepolicy">
+        <img style="width: 710px; height: 135px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= homeimage.get_homepolicyimage()) }}" alt="Norway" class="w3-hover-opacity">
+    <div class="footer">© 2020 Teo Heng. All rights reserved.</div>
+    <div class="footer">© 2020 Golden Village. All rights reserved.</div>
+    </div>
+</div>
+{% endfor %}
+
+{% for newreleases in newreleases_list %}
+<div class="moviescomingsoon">
+    <div class="comingsoontitle">NEWEST RELEASES!</div>
+    <div class="comingsoon1">
+    <img style="width: 110px; height: 160px; padding-bottom: 5px;"
+         src="{{ url_for('send_image', filename= newreleases.get_release_image1()) }}"
+         alt="Norway" class="w3-hover-opacity">
+    <div class="comingsoon1des">
+        {{ newreleases.get_release_name1() }}
+    </div>
+    </div>
+    <div class="comingsoon2">
+    <img style="width: 110px; height: 160px; padding-bottom: 5px;"
+         src="{{ url_for('send_image', filename= newreleases.get_release_image2()) }}"
+         alt="Norway" class="w3-hover-opacity">
+    <div class="comingsoon2des">
+        {{ newreleases.get_release_name2() }}
+    </div>
+    </div>
+    <div class="comingsoon3">
+    <img style="width: 110px; height: 160px; padding-bottom: 5px;"
+         src="{{ url_for('send_image', filename= newreleases.get_release_image3()) }}"
+         alt="Norway" class="w3-hover-opacity">
+    <div class="comingsoon3des">
+        {{ newreleases.get_release_name3() }}
+    </div>
+    </div>
+    <div class="comingsoon4">
+    <img style="width: 110px; height: 160px; padding-bottom: 5px;"
+         src="{{ url_for('send_image', filename= newreleases.get_release_image4()) }}"
+         alt="Norway" class="w3-hover-opacity">
+    <div class="comingsoon4des">
+        {{ newreleases.get_release_name4() }}
+    </div>
+    </div>
+
+    {% if userid == "1" %}
+    <div class="homecontentedit3">
+        <form action="{{url_for('EditNewestReleases', userid=userid, homeid=newreleases.get_homeid() )}}" method="POST">
+            <input type="submit" value="Edit" class="btn btn-outline-warning">
+        </form>
+    </div>
+    {% endif %}
+
+</div>
+{% endfor %}
+
+{% endblock %}
+</body>
+</html>

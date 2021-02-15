@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Create Questions{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<h1 style="color:gold" class="display-4">Create an FAQ question</h1>
+<style>
+  *{
+background: black;
+}
+</style>
+
+<form method="POST" action="">
+  <div style="color:gold" class="form-group">
+    {{ render_field(form.Question, class="form-control") }}
+  </div>
+  <div style="color:gold" class="form-group">
+    {{ render_field(form.Answer, class="form-control") }}
+  </div>
+  <div style="color:gold" class="form-group">
+    {{ render_field(form.Availability, class="form-control") }}
+  </div>
+  <div style="color:gold" class="form-group">
+    {{ render_field(form.NumberOfPeople, class="form-check", style="list-style-type:none;") }}
+  </div>
+  <div id="prof">
+    <div style="color:gold" class="form-group">
+      {{ render_field(form.remarks, class="form-control") }}
+    </div>
+  </div>
+  <input type="submit" value="Submit" class="btn btn-primary"/>
+</form>
+{% endblock %}

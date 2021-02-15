@@ -1,0 +1,40 @@
+<style>
+* {
+  background-color: black;
+  color:white;
+}
+</style>
+
+{% extends "base.html" %}
+{% block title %}Update Movies{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<h1 class="display-4">Update Movies</h1>
+
+<form method="POST" action="" name="" enctype="multipart/form-data">
+  <div class="form-group">
+  <h5>Movie Image</h5>
+  <!-- <img src="{{ form.movie_image }}"> -->
+  {{ form.movie_image }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.movie_name, class="form-control") }}
+  </div>
+    <div class="form-group">
+    {{ render_field(form.movieagerating, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.movieduration, class="form-control") }}
+  </div>
+  <div class="form-group">
+  {% for field in form %}
+    {% if field.type == "BooleanField" %}
+        {{ field }} {{ field.label }} <br>
+    {% endif %}
+  {% endfor %}
+  </div>
+  <input type="submit">
+</form>
+{% endblock %}
