@@ -1,10 +1,10 @@
 from wtforms import Form, StringField, PasswordField, RadioField, SelectField, TextAreaField, validators, IntegerField
-from wtforms.fields.html5 import DateField
+from wtforms import DateField
 from wtforms.validators import InputRequired, Email
 
 
 class Purchase(Form):
-    Date = DateField('', )
+    Date = SelectField('',[validators.DataRequired()],choices =[] )
     Time = SelectField('',[validators.DataRequired()], choices=[])
     location = SelectField('',[validators.DataRequired()], choices=[])
     # roomtype = SelectField('',[validators.DataRequired()], choices=[('Small'), ('Medium'), ('Big')])
@@ -30,6 +30,13 @@ class Code(Form):
     small_discount = IntegerField('',[validators.DataRequired()],render_kw={"placeholder": "eg.20, which is 20%"})
     medium_discount = IntegerField('',[ validators.DataRequired()],render_kw={"placeholder": "eg.20, which is 20%"})
     big_discount = IntegerField('',[ validators.DataRequired()],render_kw={"placeholder": "eg.20, which is 20%"})
+class Date(Form):
+    date1 = StringField('Date 1:',[validators.DataRequired()])
+    date2 = StringField('Date 2:',[validators.DataRequired()])
+    date3 = StringField('Date 3:',[validators.DataRequired()])
+    date4 = StringField('Date 4:',[validators.DataRequired()])
+    date5 = StringField('Date 5:',[validators.DataRequired()])
+
 # class LoginForm(Form):
 #
 #     email = StringField("Email", validators=[validators.Length(min=7, max=50), validators.DataRequired(message="Please Fill This Field")])
@@ -62,11 +69,6 @@ class Code(Form):
 #     NumberOfPeople= RadioField('Number of people who suggested this', choices=[('1', '1 to 10'), ('2', '11 to 20'), ('3', '21 to 30'),("4","Above 30 ")], default='1')
 #     remarks = TextAreaField('Remarks', [validators.Optional()])
 
-    # date = DateField('Date ', [validators.Length(min=1, max=150), validators.DataRequired()])
-    # date = DateField('Date :',)
-    # date3 = DateField('Date 3:', format= '%d-%m-%Y', render_kw={"placeholder": "DD-MM-YYYY"})
-    # date4 = DateField('Date 4:', format= '%d-%m-%Y', render_kw={"placeholder": "DD-MM-YYYY"})
-    # date5 = DateField('Date 5:', format= '%d-%m-%Y', render_kw={"placeholder": "DD-MM-YYYY"})
     # date6 = DateField('Date 6:', format= '%d-%m-%Y', render_kw={"placeholder": "DD-MM-YYYY"})
     # date7 = DateField('Date 7:', format= '%d-%m-%Y', render_kw={"placeholder": "DD-MM-YYYY"})
 

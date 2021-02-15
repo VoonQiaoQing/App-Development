@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Retrieve Time{% endblock %}
+<style>
+ body{
+  background:#333333;
+  color:#fff;
+}
+</style>
+{% block content %}
+<h1 class="display-4">Timing</h1>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Date 1</th>
+        <th>Date 2</th>
+        <th>Date 3</th>
+        <th>Date 4</th>
+        <th>Date 5</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for date in add_date_list %}
+      <tr>
+        <td>{{ date.get_admin_date_Id()}}</td>
+        <td>{{ date.get_date1() }}</td>
+        <td>{{ date.get_date2() }}</td>
+        <td>{{ date.get_date3() }}</td>
+        <td>{{ date.get_date4() }}</td>
+        <td>{{ date.get_date5() }}</td>
+        <td><a href="/updatedate/{{date.get_admin_date_Id()}}" class="btn btn-warning">Update</a></td>
+      </tr>
+    {% endfor %}
+
+    </tbody>
+  </table>
+</div>
+{% endblock %}

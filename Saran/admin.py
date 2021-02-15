@@ -86,25 +86,45 @@ class Add_time:
     def get_time5(self):
         return self.__time5
 
-# class Admin_date:
-#     admin_date_Id = 0
-#
-#     def __init__(self,date):
-#         Admin_date.admin_date_Id += 1
-#         self.__admin_date_Id = Admin_date.admin_date_Id
-#         self.__date = date
-#
-#     def set_admin_date_Id(self, admin_date_Id):
-#         self.__admin_date_Id = admin_date_Id
-#
-#     def set_date(self, date):
-#         self.__date = date
-#
-#     def get_admin_date_Id(self):
-#         return self.__admin_date_Id
-#
-#     def get_date(self):
-#         return self.__date
+class Admin_date:
+
+    def __init__(self,date1,date2,date3,date4,date5):
+        Admin_date.admin_date_Id = 1
+        self.__admin_date_Id = Admin_date.admin_date_Id
+        self.__date1 = date1
+        self.__date2 = date2
+        self.__date3 = date3
+        self.__date4 = date4
+        self.__date5 = date5
+
+    def set_admin_date_Id(self, admin_date_Id):
+        self.__admin_date_Id = admin_date_Id
+
+    def set_date1(self, date1):
+        self.__date1 = date1
+    def set_date2(self, date2):
+        self.__date2 = date2
+    def set_date3(self, date3):
+        self.__date3 = date3
+    def set_date4(self, date4):
+        self.__date4 = date4
+    def set_date5(self, date5):
+        self.__date5 = date5
+
+    def get_admin_date_Id(self):
+        return self.__admin_date_Id
+
+    def get_date1(self):
+        return self.__date1
+    def get_date2(self):
+        return self.__date2
+    def get_date3(self):
+        return self.__date3
+    def get_date4(self):
+        return self.__date4
+    def get_date5(self):
+        return self.__date5
+
 
 
     # def set_location2(self, location2):
