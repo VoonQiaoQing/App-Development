@@ -494,35 +494,51 @@ def EditRooms(userid,id):
                 roominfo_dict = db['RoomInfo']
 
                 roominfo = roominfo_dict.get(id)
+
                 roominfo.set_roomtitle(room_form.room_title.data)
                 roominfo.set_small_roominfo(room_form.small_roominfo.data)
+                roominfo.set_small_roomprice(room_form.small_roomprice.data)
                 roominfo.set_small_roomimage1(filename1)
                 roominfo.set_small_roomimage2(filename2)
                 roominfo.set_med_roominfo(room_form.med_roominfo.data)
+                roominfo.set_med_roomprice(room_form.med_roomprice.data)
                 roominfo.set_med_roomimage(filename3)
                 roominfo.set_large_roominfo(room_form.large_roominfo.data)
+                roominfo.set_large_roomprice(room_form.large_roomprice.data)
                 roominfo.set_large_roomimage1(filename4)
                 roominfo.set_large_roomimage2(filename5)
-                roominfo.set_gvexclusiveinfo(room_form.gvexclusiveinfo.data)
+                roominfo.set_gvexclusivesmall_roominfo(room_form.gvexclusivesmall_roominfo.data)
+                roominfo.set_gvexclusivesmall_roomprice(room_form.gvexclusivesmall_roomprice.data)
+                roominfo.set_gvexclusivemed_roominfo(room_form.gvexclusivemed_roominfo.data)
+                roominfo.set_gvexclusivemed_roomprice(room_form.gvexclusivemed_roomprice.data)
+                roominfo.set_gvexclusivelarge_roominfo(room_form.gvexclusivelarge_roominfo.data)
+                roominfo.set_gvexclusivelargeroomprice(room_form.gvexclusivelargeroomprice.data)
 
                 db['RoomInfo'] = roominfo_dict
                 db.close()
-
                 session['login'] = userid
 
                 return redirect(url_for('moviescustomer',userid=session['login']))
 
     else:
         roominfo_dict = {}
-        db = shelve.open('roominfostorage.db', 'r')
+        db = shelve.open('roominfostorage.db', 'w')
         roominfo_dict = db['RoomInfo']
 
         roominfo = roominfo_dict.get(id)
         room_form.room_title.data = roominfo.get_roomtitle()
         room_form.small_roominfo.data = roominfo.get_small_roominfo()
+        room_form.small_roomprice.data = roominfo.get_small_roomprice()
         room_form.med_roominfo.data = roominfo.get_med_roominfo()
+        room_form.med_roomprice.data = roominfo.get_med_roomprice()
         room_form.large_roominfo.data = roominfo.get_large_roominfo()
-        room_form.gvexclusiveinfo.data = roominfo.get_gvexclusiveinfo()
+        room_form.large_roomprice.data = roominfo.get_large_roomprice()
+        room_form.gvexclusivesmall_roominfo.data = roominfo.get_gvexclusivesmall_roominfo()
+        room_form.gvexclusivesmall_roomprice.data = roominfo.get_gvexclusivesmall_roomprice()
+        room_form.gvexclusivemed_roominfo.data = roominfo.get_gvexclusivemed_roominfo()
+        room_form.gvexclusivemed_roomprice.data = roominfo.get_gvexclusivemed_roomprice()
+        room_form.gvexclusivelarge_roominfo.data = roominfo.get_gvexclusivelarge_roominfo()
+        room_form.gvexclusivelargeroomprice.data = roominfo.get_gvexclusivelargeroomprice()
         room_form.small_roomimage1.data = roominfo.get_small_roomimage1()
         room_form.small_roomimage2.data = roominfo.get_small_roomimage2()
         room_form.med_roomimage.data = roominfo.get_med_roomimage()
