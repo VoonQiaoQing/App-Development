@@ -25,13 +25,13 @@
   padding-right: 5px;
   padding-bottom: 5px;
   padding-left: 5px;
-  width: 90%;
+  width: 60%;
   float: left;
   background-color: gold;
   border: 1px solid grey;
 }
 
-.GVE h4,.GVE h5 {
+.GVE h4, .GVE h5{
   padding-left: 5px;
   float: left;
   color: black;
@@ -127,7 +127,7 @@
   border: 1px solid gold;
 }
 
-.purchase{
+.purchase, Review{
   float: right;
   width: 95px;
   height:40px;
@@ -139,7 +139,7 @@
   right: 16px;
 }
 
-.purchase:hover, .filter:hover{
+.purchase:hover, .Review:hover, .filter:hover{
   background-color: gold;
   color: black;
 }
@@ -167,6 +167,7 @@
 <div class="w3-third w3-container w3-margin-bottom">
     <div class="w3-container w3-white">
         <h4>{{ roominfo.get_small_roominfo() }}</h4>
+        <h4>${{ roominfo.get_small_roomprice() }}</h4>
     </div>
     <div class="w3-container w3-white">
         <img style="width: 125px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_small_roomimage1()) }}" alt="Norway" class="w3-hover-opacity">
@@ -176,6 +177,7 @@
 <div class="w3-third w3-container w3-margin-bottom">
     <div class="w3-container w3-white">
         <h4>{{ roominfo.get_med_roominfo() }}</h4>
+        <h4>${{ roominfo.get_med_roomprice() }}</h4>
     </div>
     <div class="w3-container w3-white">
         <img style="width: 265px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_med_roomimage()) }}" alt="Norway" class="w3-hover-opacity">
@@ -184,6 +186,7 @@
 <div class="w3-third w3-container w3-margin-bottom">
     <div class="w3-container w3-white">
         <h4>{{ roominfo.get_large_roominfo() }}</h4>
+        <h4>${{ roominfo.get_large_roomprice() }}</h4>
     </div>
     <div class="w3-container w3-white">
         <img style="width: 125px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_large_roomimage1()) }}" alt="Norway" class="w3-hover-opacity">
@@ -192,7 +195,12 @@
 </div>
 <div class="GVE">
     <h4>FOR GV EXCLUSIVE</h4>
-    <h5>{{ roominfo.get_gvexclusiveinfo() }}</h5>
+    <h5>{{ roominfo.get_gvexclusivesmall_roominfo() }}</h5>
+    <h5>${{ roominfo.get_gvexclusivesmall_roomprice() }}</h5>
+    <h5>{{ roominfo.get_gvexclusivemed_roominfo() }}</h5>
+    <h5>${{ roominfo.get_gvexclusivemed_roomprice() }}</h5>
+    <h5>{{ roominfo.get_gvexclusivelarge_roominfo() }}</h5>
+    <h5>${{ roominfo.get_gvexclusivelargeroomprice() }}</h5>
 </div>
 </div>
 
@@ -309,6 +317,10 @@
                     <div class="Tag"> Action </div>
                 {% else %}
                 {% endif %}
+
+            <div class="Review">
+                <p><a href="/Review/{{ session['login'] }}"><button class="review"> Review! </button></a></p>
+            </div>
 
             {% if 'login' in session %}
                 {% if userid != None %}
