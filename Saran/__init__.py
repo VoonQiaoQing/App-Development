@@ -473,40 +473,46 @@ def roomtype(id):
         available_keys = []
         for i in available_dict.keys():
             available_keys.append(i)
+        found = 0
         for x in available_keys:
             if x.get_location() == purchase_dict.get(1).get_location() and x.get_Time() == purchase_dict.get(1).get_Time() and x.get_Date() == purchase_dict.get(1).get_Date():
-                if roomtype_form.roomtype.data == 'Small':
-                    s = booking.Minus(available_dict.get(x).get_small_left())
-                    left = booking.Left(s.get_minus(),available_dict.get(x).get_medium_left(),available_dict.get(x).get_big_left())
-                    available_dict[purchase_dict.get(1)] =left
-                    db['Available'] = available_dict
+                found += 1
+        if found > 1:
+            for x in available_keys:
+                if x.get_location() == purchase_dict.get(1).get_location() and x.get_Time() == purchase_dict.get(1).get_Time() and x.get_Date() == purchase_dict.get(1).get_Date():
+                    if roomtype_form.roomtype.data == 'Small':
+                        s = booking.Minus(available_dict.get(x).get_small_left())
+                        left = booking.Left(s.get_minus(),available_dict.get(x).get_medium_left(),available_dict.get(x).get_big_left())
+                        available_dict[purchase_dict.get(1)] =left
+                        db['Available'] = available_dict
 
-                elif roomtype_form.roomtype.data == 'Medium':
-                    m = booking.Minus(available_dict.get(x).get_medium_left())
-                    left = booking.Left(available_dict.get(x).get_small_left(),m.get_minus(),available_dict.get(x).get_big_left())
-                    available_dict[purchase_dict.get(1)] =left
-                    db['Available'] = available_dict
+                    elif roomtype_form.roomtype.data == 'Medium':
+                        m = booking.Minus(available_dict.get(x).get_medium_left())
+                        left = booking.Left(available_dict.get(x).get_small_left(),m.get_minus(),available_dict.get(x).get_big_left())
+                        available_dict[purchase_dict.get(1)] =left
+                        db['Available'] = available_dict
 
-                elif roomtype_form.roomtype.data == 'Big':
-                    b = booking.Minus(available_dict.get(x).get_big_left())
-                    left = booking.Left(available_dict.get(x).get_small_left(),available_dict.get(x).get_medium_left(),b.get_minus())
-                    available_dict[purchase_dict.get(1)] =left
-                    db['Available'] = available_dict
-            elif x.get_location() is not purchase_dict.get(1).get_location() or x.get_Time() is not purchase_dict.get(1).get_Time() or x.get_Date() is not purchase_dict.get(1).get_Date():
-                if roomtype_form.roomtype.data == 'Small':
-                    left = booking.Left(4,5,5)
-                    available_dict[purchase_dict.get(1)] =left
-                    db['Available'] = available_dict
+                    elif roomtype_form.roomtype.data == 'Big':
+                        b = booking.Minus(available_dict.get(x).get_big_left())
+                        left = booking.Left(available_dict.get(x).get_small_left(),available_dict.get(x).get_medium_left(),b.get_minus())
+                        available_dict[purchase_dict.get(1)] =left
+                        db['Available'] = available_dict
 
-                elif roomtype_form.roomtype.data == 'Medium':
-                    left = booking.Left(5,4,5)
-                    available_dict[purchase_dict.get(1)] =left
-                    db['Available'] = available_dict
+        else:
+            if roomtype_form.roomtype.data == 'Small':
+                left = booking.Left(4,5,5)
+                available_dict[purchase_dict.get(1)] =left
+                db['Available'] = available_dict
 
-                elif roomtype_form.roomtype.data == 'Big':
-                    left = booking.Left(5,5,4)
-                    available_dict[purchase_dict.get(1)] =left
-                    db['Available'] = available_dict
+            elif roomtype_form.roomtype.data == 'Medium':
+                left = booking.Left(5,4,5)
+                available_dict[purchase_dict.get(1)] =left
+                db['Available'] = available_dict
+
+            elif roomtype_form.roomtype.data == 'Big':
+                left = booking.Left(5,5,4)
+                available_dict[purchase_dict.get(1)] =left
+                db['Available'] = available_dict
         db.close()
         return redirect(url_for('checkout'))
     available_dict = {}
@@ -516,12 +522,59 @@ def roomtype(id):
     available_keys = []
     for i in available_dict.keys():
         available_keys.append(i)
+    found = 0
     for available in available_keys:
         if available.get_location() == purchase_dict.get(1).get_location() and available.get_Time() == purchase_dict.get(1).get_Time() and available.get_Date() == purchase_dict.get(1).get_Date():
-            room = booking.Left(available_dict.get(available).get_small_left(),available_dict.get(available).get_medium_left(),available_dict.get(available).get_big_left())
-        elif available.get_location() is not purchase_dict.get(1).get_location() or available.get_Time() is not purchase_dict.get(1).get_Time() or available.get_Date() is not purchase_dict.get(1).get_Date():
-            room = booking.Left(5,5,5)
+            found += 1
+        else:
+            found += 0
+
+    if found > 0:
+         for available in available_keys:
+             if available.get_location() == purchase_dict.get(1).get_location() and available.get_Time() == purchase_dict.get(1).get_Time() and available.get_Date() == purchase_dict.get(1).get_Date():
+                 room = booking.Left(available_dict.get(available).get_small_left(),available_dict.get(available).get_medium_left(),available_dict.get(available).get_big_left())
+                 if available_dict.get(available).get_small_left() < 1:
+                     roomtype_form.roomtype.choices = ['Medium','Big']
+                     if available_dict.get(available).get_medium_left() < 1:
+                         roomtype_form.roomtype.choices = ['Big']
+                         if available_dict.get(available).get_big_left() < 1:
+                             return redirect(url_for('NoRoom'))
+                     elif available_dict.get(available).get_big_left() < 1:
+                        roomtype_form.roomtype.choices = ['Medium']
+                        if available_dict.get(available).get_medium_left() < 1:
+                            return redirect(url_for('NoRoom'))
+                 elif available_dict.get(available).get_medium_left() < 1:
+                     roomtype_form.roomtype.choices = ['Small','Big']
+                     if available_dict.get(available).get_small_left() < 1:
+                         roomtype_form.roomtype.choices = ['Big']
+                         if available_dict.get(available).get_big_left() < 1:
+                            return redirect(url_for('NoRoom'))
+                     elif available_dict.get(available).get_big_left() < 1:
+                        roomtype_form.roomtype.choices = ['Small']
+                        if available_dict.get(available).get_small_left() < 1:
+                            return redirect(url_for('NoRoom'))
+                 elif available_dict.get(available).get_big_left() < 1:
+                     roomtype_form.roomtype.choices = ['Small','Medium']
+                     if available_dict.get(available).get_medium_left() < 1:
+                         roomtype_form.roomtype.choices = ['Small']
+                         if available_dict.get(available).get_small_left() < 1:
+                            return redirect(url_for('NoRoom'))
+                     elif available_dict.get(available).get_small_left() < 1:
+                        roomtype_form.roomtype.choices = ['Medium']
+                        if available_dict.get(available).get_medium_left() < 1:
+                            return redirect(url_for('NoRoom'))
+                 # else:
+                 #     roomtype_form.roomtype.choices = ['Small','Medium','Big']
+
+
+
+
+    else:
+        room = booking.Left(5,5,5)
     return render_template('roomtype.html',room=room, form=roomtype_form, purchase_list=purchase_list, movie=movie)
+@app.route('/NoRoom')
+def NoRoom():
+    return render_template('NoRoom.html')
 @app.route('/promocode')
 def promocode():
     code_dict = {}
