@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}FAQ Page{% endblock %}\
+{% block content %}
+
+<html xmlns:color="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+*{
+background: black;
+}
+.collapsible {
+  background-color: black;
+  color: gold;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: indigo;
+}
+
+.content {
+  padding: 0 5px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 1.5s ease-out;
+  background-color:black;
+  color:gold;
+}
+</style>
+</head>
+<body>
+
+<h2 style="color:gold;font-size:50px;text-align:center">Services</h2>
+
+<h4 style="color:gold;font-size:30px;text-align:center">FAQ question board:</h4>
+<button class="collapsible">1)How far in advance can i book my tickets?</button>
+<div class="content">
+  <p>You can book your tickets 5 days in advance</p>
+</div>
+<button class="collapsible">2)How do i resend my quicktix or confirmaton email?</button>
+<div class="content">
+  <p>Just click resend</p>
+</div>
+<button class="collapsible">3)Why cant i buy promotional tickets (e.g student discount , elderly discount)?</button>
+<div class="content">
+  <p>Because it is not available</p>
+</div>
+<button class="collapsible">4)I have a complimentary ticket. How do i use it</button>
+<div class="content">
+  <p>Go to your nearest cinema to use it</p>
+</div>
+<button class="collapsible">5)How do i apply for a membership?</button>
+<div class="content">
+  <p>Enter your credit card details and information to apply for a membership</p>
+</div>
+<button class="collapsible">6)What are the benefits of having a membership</button>
+<div class="content">
+  <p>You have early access to new movies and have special discounts and events from time to time </p>
+</div>
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
+  });
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane container active" id="FAQ"</div>
+
+
+</div>
+{% endblock %}
