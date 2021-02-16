@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Retrieve Users{% endblock %}
+<style>
+ body{
+  background:#333333;
+  color:#fff;
+}
+</style>
+{% block content %}
+<h1 class="display-4">Location</h1>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Location 1</th>
+        <th>Location 2</th>
+        <th>Location 3</th>
+        <th>Location 4</th>
+        <th>Location 5</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for location in add_location_list %}
+      <tr>
+        <td>{{ location.get_location_Id() }}</td>
+        <td>{{ location.get_location1() }}</td>
+        <td>{{ location.get_location2() }}</td>
+        <td>{{ location.get_location3() }}</td>
+        <td>{{ location.get_location4() }}</td>
+        <td>{{ location.get_location5() }}</td>
+        <td><a href="/updatelocation/{{location.get_location_Id()}}" class="btn btn-warning">Update</a></td>
+      </tr>
+    {% endfor %}
+
+    </tbody>
+  </table>
+</div>
+{% endblock %}

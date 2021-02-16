@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Movies{% endblock %}</title>
+    {% block title %}Movies{% endblock %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 
@@ -18,6 +18,12 @@
   padding-left: 5px;
   width: 300px;
   float: left;
+}
+
+.RoomsPricing img:nth-child(1), .RoomsPricing img:nth-child(2){
+  width: 125px;
+  height: 205px;
+  padding-bottom: 25px;
 }
 
 .GVE{
@@ -42,7 +48,7 @@
   position: relative;
   padding-top: 5px;
   padding-right: 5px;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
   padding-left: 5px;
   width: 450px;
   float: right;
@@ -144,141 +150,334 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-{% for roominfo in roominfo_list %}
+    {% for staff in staff_list %}
 <div class="RoomsPricing">
-
-  {% if roomcount == 0 %}
-  <p>There are no rooms.</p>
-  {% endif %}
-
-<h2>{{ roominfo.get_roomtitle() }}</h2>
-<p><a href="EditRooms"><button class="edit">Edit</button></a></p>
+<h2>{{ staff.get_roomtitle() }}</h2>
+<p><a href="staffeditrooms"><button class="edit">Edit</button></a></p>
 <div class="w3-third w3-container w3-margin-bottom">
     <div class="w3-container w3-white">
-        <h4>{{ roominfo.get_small_roominfo() }}</h4>
+        <h4>{{ staff.get_small_roominfo() }}</h4>
     </div>
     <div class="w3-container w3-white">
-        <img style="width: 125px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_small_roomimage1()) }}" alt="Norway" class="w3-hover-opacity">
-        <img style="width: 125px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_small_roomimage2()) }}" alt="Norway" class="w3-hover-opacity">
+        <img src="{{ url_for('static', filename='smallroom1.jpg') }}" alt="Norway" class="w3-hover-opacity">
+        <img src="{{ url_for('static', filename='smallroom2.jpg') }}" alt="Norway" class="w3-hover-opacity">
     </div>
 </div>
 <div class="w3-third w3-container w3-margin-bottom">
     <div class="w3-container w3-white">
-        <h4>{{ roominfo.get_med_roominfo() }}</h4>
+        <h4>{{ staff.get_med_roominfo() }}</h4>
     </div>
     <div class="w3-container w3-white">
-        <img style="width: 265px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_med_roomimage()) }}" alt="Norway" class="w3-hover-opacity">
+        <img src="{{ url_for('static', filename='mediumroom.jpg') }}" alt="Norway" class="w3-hover-opacity">
     </div>
 </div>
 <div class="w3-third w3-container w3-margin-bottom">
     <div class="w3-container w3-white">
-        <h4>{{ roominfo.get_large_roominfo() }}</h4>
+        <h4>{{ staff.get_large_roominfo() }}(</h4>
     </div>
     <div class="w3-container w3-white">
-        <img style="width: 125px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_large_roomimage1()) }}" alt="Norway" class="w3-hover-opacity">
-        <img style="width: 125px; height: 205px; padding-bottom: 25px;" src="{{ url_for('send_image', filename= roominfo.get_large_roomimage2()) }}" alt="Norway" class="w3-hover-opacity">
+        <img src="{{ url_for('static', filename='largeroom1.jpg') }}" alt="Norway" class="w3-hover-opacity">
+        <img src="{{ url_for('static', filename='largeroom2.jpg') }}" alt="Norway" class="w3-hover-opacity">
     </div>
 </div>
 <div class="GVE">
     <h4>FOR GV EXCLUSIVE</h4>
-    <h5>{{ roominfo.get_gvexclusiveinfo() }}</h5>
+    <h5>Small Room - Up to 2 PAX \ $28<br>Medium Room - Up to 4 PAX \ $40<br>Large Room - Up to 6 PAX \ $52</h5>
 </div>
 </div>
-
-{% endfor %}
-
+    {% endfor %}
 <div class="MoviesList">
-
+<button class="filter">Filter</button>
 </div>
 
 <div class="MoviesList">
 <h2>Showing Now!</h2>
-<div>
-  {% if moviecount == 0 %}
-  <p>There are no movies.</p>
-  {% elif moviecount == 1 %}
-  <p>There is 1 movies.</p>
-  {% else %}
-  <p>There are {{ moviecount }} movies.</p>
-  {% endif %}
-</div>
-<p><a href="ChooseMovies"><button class="edit">Edit</button></a></p>
+<p><a href="staffeditmovies"><button class="edit">Edit</button></a></p>
 </div>
 
-{% for movieinfo in movieinfo_list %}
-
-    <div class="MoviesList">
-         <div class="w3-container w3-white1">
-             {% if image_list %}
-             <!--<img src= "{{ url_for('static', filename='thewitches.webp') }}"> -->
-            <img src="{{ url_for('send_image', filename= movieinfo.get_movieimage()) }}" alt="Norway" class="w3-hover-opacity">
-             {% endif %}
-         </div>
-        <div class="w3-container w3-white2">
-            <div class="MovieTitle">
-                <h5>{{ movieinfo.get_moviename() }}</h5>
-                <h6>{{ movieinfo.get_movieagerating() }}<br>{{ movieinfo.get_movieduration() }}</h6>
-            </div>
-            <div class="GVEDiv">
-                {% if movieinfo.get_gvexclusivetag() == True %}
-                <div class="GVEanot">GV EXCLUSIVE</div>
-                {% else %}
-                {% endif %}
-            </div>
-            <div class="GenreTags">
-                {% if movieinfo.get_movieHorror() == True %}
-                    <div class="Tag"> Horror </div>
-                {% else %}
-                {% endif %}
-                {% if movieinfo.get_movieDrama() == True %}
-                    <div class="Tag"> Drama </div>
-                {% else %}
-                {% endif %}
-                {% if movieinfo.get_movieScience() == True %}
-                    <div class="Tag"> Science </div>
-                {% else %}
-                {% endif %}
-                {% if movieinfo.get_movieComedy() == True %}
-                    <div class="Tag"> Comedy </div>
-                {% else %}
-                {% endif %}
-                {% if movieinfo.get_movieRomance() == True %}
-                    <div class="Tag"> Romance </div>
-                {% else %}
-                {% endif %}
-                {% if movieinfo.get_movieAnimation() == True %}
-                    <div class="Tag"> Animation </div>
-                {% else %}
-                {% endif %}
-                {% if movieinfo.get_movieCrimeFilm() == True %}
-                    <div class="Tag"> Crime Film </div>
-                {% else %}
-                {% endif %}
-                {% if movieinfo.get_movieThriller() == True %}
-                    <div class="Tag"> Thriller </div>
-                {% else %}
-                {% endif %}
-                {% if movieinfo.get_movieAdventure() == True %}
-                    <div class="Tag"> Adventure </div>
-                {% else %}
-                {% endif %}
-                {% if movieinfo.get_movieEmotional() == True %}
-                    <div class="Tag"> Emotional </div>
-                {% else %}
-                {% endif %}
-                {% if movieinfo.get_movieMystery() == True %}
-                    <div class="Tag"> Mystery </div>
-                {% else %}
-                {% endif %}
-                {% if movieinfo.get_movieAction() == True %}
-                    <div class="Tag"> Action </div>
-                {% else %}
-                {% endif %}
-            </div>
+<div class="MoviesList">
+    <div class="w3-container w3-white1">
+        <img src="{{ url_for('static', filename='thewitches.webp') }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+    <div class="w3-container w3-white2">
+        <div class="MovieTitle">
+            <h5>The Witches</h5>
+            <h6>(PG13: Some Frightening Scenes)<br>105 minutes</h6>
+        </div>
+        <div class="GVEDiv">
+        </div>
+        <div class="GenreTags">
+            <div class="Tag">Drama</div>
+            <div class="Tag">Adventure</div>
         </div>
     </div>
-{% endfor %}
-{% endblock %}
+    <div class="w3-container w3-white3">
+        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+    </div>
+</div>
+
+<div class="MoviesList">
+    <div class="w3-container w3-white1">
+        <img src="{{ url_for('static', filename='demonslayer.webp') }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+    <div class="w3-container w3-white2">
+        <div class="MovieTitle">
+            <h5>Demon Slayer:The Movie-Mugen Train *</h5>
+            <h6>(PG13: Some Violence)<br>116 minutes</h6>
+        </div>
+        <div class="GVEDiv">
+            <div class="GVEanot">GV EXCLUSIVE</div>
+        </div>
+        <div class="GenreTags">
+            <div class="Tag">Science</div>
+            <div class="Tag">Thriller</div>
+        </div>
+    </div>
+    <div class="w3-container w3-white3">
+        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+    </div>
+</div>
+
+<div class="MoviesList">
+    <div class="w3-container w3-white1">
+        <img src="{{ url_for('static', filename='samjincompany.webp') }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+    <div class="w3-container w3-white2">
+        <div class="MovieTitle">
+            <h5>Samjin Company English Class *</h5>
+            <h6>(PG13: Some Coarse Language)<br>110 minutes</h6>
+        </div>
+        <div class="GVEDiv">
+        </div>
+        <div class="GenreTags">
+            <div class="Tag">Romance</div>
+            <div class="Tag">Action</div>
+            <div class="Tag">Drama</div>
+        </div>
+    </div>
+    <div class="w3-container w3-white3">
+        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+    </div>
+</div>
+
+<div class="MoviesList">
+    <div class="w3-container w3-white1">
+        <img src="{{ url_for('static', filename='horizonline.webp') }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+    <div class="w3-container w3-white2">
+        <div class="MovieTitle">
+            <h5>Horizon Line *</h5>
+            <h6>(NC16: Some Drug Use)<br>92 minutes</h6>
+        </div>
+        <div class="GVEDiv">
+        </div>
+        <div class="GenreTags">
+            <div class="Tag">Crime Film</div>
+            <div class="Tag">Action</div>
+            <div class="Tag">Adventure</div>
+            <div class="Tag">Mystery</div>
+        </div>
+    </div>
+    <div class="w3-container w3-white3">
+        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+    </div>
+</div>
+
+<div class="MoviesList">
+    <div class="w3-container w3-white1">
+        <img src="{{ url_for('static', filename='voiceofsilence.webp') }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+    <div class="w3-container w3-white2">
+        <div class="MovieTitle">
+            <h5>Voice Of Silence</h5>
+            <h6>(PG13: Some Violence)<br>100 minutes</h6>
+        </div>
+        <div class="GVEDiv">
+        </div>
+        <div class="GenreTags">
+            <div class="Tag">Comedy</div>
+            <div class="Tag">Action</div>
+            <div class="Tag">Adventure</div>
+            <div class="Tag">Mystery</div>
+        </div>
+    </div>
+    <div class="w3-container w3-white3">
+        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+    </div>
+</div>
+
+<div class="MoviesList">
+    <div class="w3-container w3-white1">
+        <img src="{{ url_for('static', filename='honestthief.webp') }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+    <div class="w3-container w3-white2">
+        <div class="MovieTitle">
+            <h5>Honest Thief</h5>
+            <h6>(PG13: Violence & Brief Coarse Language)<br>99 minutes</h6>
+        </div>
+        <div class="GVEDiv">
+        </div>
+        <div class="GenreTags">
+            <div class="Tag">Crime Film</div>
+            <div class="Tag">Action</div>
+            <div class="Tag">Adventure</div>
+            <div class="Tag">Mystery</div>
+        </div>
+    </div>
+    <div class="w3-container w3-white3">
+        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+    </div>
+</div>
+
+<div class="MoviesList">
+    <div class="w3-container w3-white1">
+        <img src="{{ url_for('static', filename='kutuk.webp') }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+    <div class="w3-container w3-white2">
+        <div class="MovieTitle">
+            <h5>Kutuk</h5>
+            <h6>(NC16: Violence & Horror)<br>83 minutes</h6>
+        </div>
+        <div class="GVEDiv">
+        </div>
+        <div class="GenreTags">
+            <div class="Tag">Horror</div>
+            <div class="Tag">Adventure</div>
+            <div class="Tag">Mystery</div>
+        </div>
+    </div>
+    <div class="w3-container w3-white3">
+        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+    </div>
+</div>
+
+<div class="MoviesList">
+    <div class="w3-container w3-white1">
+        <img src="{{ url_for('static', filename='onward.webp') }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+    <div class="w3-container w3-white2">
+        <div class="MovieTitle">
+            <h5>Disney/Pixar's Onward</h5>
+            <h6>(PG)102 minutes</h6>
+        </div>
+        <div class="GVEDiv">
+        </div>
+        <div class="GenreTags">
+            <div class="Tag">Animation</div>
+            <div class="Tag">Comedy</div>
+            <div class="Tag">Adventure</div>
+        </div>
+    </div>
+    <div class="w3-container w3-white3">
+        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+    </div>
+</div>
+
+<div class="MoviesList">
+    <div class="w3-container w3-white1">
+        <img src="{{ url_for('static', filename='21bridges.webp') }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+    <div class="w3-container w3-white2">
+        <div class="MovieTitle">
+            <h5>21 Bridges</h5>
+            <h6>(NC16: Coarse Language & Violence)<br>99 minutes</h6>
+        </div>
+        <div class="GVEDiv">
+        </div>
+        <div class="GenreTags">
+            <div class="Tag">Crime Film</div>
+            <div class="Tag">Adventure</div>
+            <div class="Tag">Action</div>
+        </div>
+    </div>
+    <div class="w3-container w3-white3">
+        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+    </div>
+</div>
+
+<div class="MoviesList">
+    <div class="w3-container w3-white1">
+        <img src="{{ url_for('static', filename='pinocchio.webp') }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+    <div class="w3-container w3-white2">
+        <div class="MovieTitle">
+            <h5>Pinocchio</h5>
+            <h6>(PG: Some Frightening Scenes)<br>125 minutes</h6>
+        </div>
+        <div class="GVEDiv">
+            <div class="GVEanot">GV EXCLUSIVE</div>
+        </div>
+        <div class="GenreTags">
+            <div class="Tag">Animation</div>
+            <div class="Tag">Comedy</div>
+            <div class="Tag">Adventure</div>
+        </div>
+    </div>
+    <div class="w3-container w3-white3">
+        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+    </div>
+</div>
+
+<div class="MoviesList" style="height: 45px;">
+</div>
+<div class="MoviesList" style="height: 45px;">
+</div>
+
+<div class="MoviesList">
+</div>
+
+<div class="MoviesList">
+<h2>Coming Soon!</h2>
+</div>
+
+<div class="MoviesList">
+    <div class="w3-container w3-white1">
+        <img src="{{ url_for('static', filename='youreyestell.webp') }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+    <div class="w3-container w3-white2">
+        <div class="MovieTitle">
+            <h5>Your Eyes Tell</h5>
+            <h6>(PG13: Some Violence)<br>123 minutes</h6>
+        </div>
+        <div class="GVEDiv">
+        </div>
+        <div class="GenreTags">
+            <div class="Tag">Romance</div>
+            <div class="Tag">Comedy</div>
+            <div class="Tag">Emotional</div>
+        </div>
+    </div>
+    <div class="w3-container w3-white3">
+        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+    </div>
+</div>
+
+<div class="MoviesList">
+    <div class="w3-container w3-white1">
+        <img src="{{ url_for('static', filename='thewidow.webp') }}" alt="Norway" class="w3-hover-opacity">
+    </div>
+    <div class="w3-container w3-white2">
+        <div class="MovieTitle">
+            <h5>The Widow</h5>
+            <h6>(NC16: Some Nudity & Disturbing Scenes)<br>86 minutes</h6>
+        </div>
+        <div class="GVEDiv">
+        </div>
+        <div class="GenreTags">
+            <div class="Tag">Horror</div>
+            <div class="Tag">Adventure</div>
+            <div class="Tag">Mystery</div>
+        </div>
+    </div>
+    <div class="w3-container w3-white3">
+        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+    </div>
+</div>
+
+<div class="MoviesList">
+</div>
+<div class="MoviesList">
+</div>
+
 </body>
 </html>

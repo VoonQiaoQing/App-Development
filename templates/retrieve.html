@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+<style>
+ body{
+  background:#333333;
+  color:#fff;
+}
+</style>
+{% block content %}
+<h1 class="display-4">Codes and Discount Percent</h1>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Small Code</th>
+        <th>Small Discount Percent </th>
+        <th>Medium Code</th>
+        <th>Medium Discount Percent </th>
+        <th>Big Code</th>
+        <th>Big Discount Percent </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for i in code_list %}
+      <tr>
+        <td>{{ i.get_Id() }}</td>
+        <td>{{ i.get_small_code() }}</td>
+        <td>{{ i.get_small_discount() }}%</td>
+        <td>{{ i.get_medium_code() }}</td>
+        <td>{{ i.get_medium_discount() }}%</td>
+        <td>{{ i.get_big_code() }}</td>
+        <td>{{ i.get_big_discount() }}%</td>
+        <td><a href="/updatecode/{{i.get_Id()}}" class="btn btn-warning">Update</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

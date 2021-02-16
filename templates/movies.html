@@ -149,12 +149,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% for staff in staff_list %}
 <div class="RoomsPricing">
-<h2>{{ staff.get_roomtitle() }}</h2>
+<h2>Rooms Pricings!</h2>
 <div class="w3-third w3-container w3-margin-bottom">
     <div class="w3-container w3-white">
-        <h4>{{ staff.get_small_roominfo() }}</h4>
+        <h4>Small Room - Up to 2 PAX \ $20</h4>
     </div>
     <div class="w3-container w3-white">
         <img src="{{ url_for('static', filename='smallroom1.jpg') }}" alt="Norway" class="w3-hover-opacity">
@@ -163,7 +162,7 @@
 </div>
 <div class="w3-third w3-container w3-margin-bottom">
     <div class="w3-container w3-white">
-        <h4>{{ staff.get_med_roominfo() }}</h4>
+        <h4>Medium Room - Up to 4 PAX \ $32</h4>
     </div>
     <div class="w3-container w3-white">
         <img src="{{ url_for('static', filename='mediumroom.jpg') }}" alt="Norway" class="w3-hover-opacity">
@@ -171,7 +170,7 @@
 </div>
 <div class="w3-third w3-container w3-margin-bottom">
     <div class="w3-container w3-white">
-        <h4>{{ staff.get_large_roominfo() }}</h4>
+        <h4>Large Room - Up to 6 PAX \ $42</h4>
     </div>
     <div class="w3-container w3-white">
         <img src="{{ url_for('static', filename='largeroom1.jpg') }}" alt="Norway" class="w3-hover-opacity">
@@ -183,7 +182,6 @@
     <h5>Small Room - Up to 2 PAX \ $28<br>Medium Room - Up to 4 PAX \ $40<br>Large Room - Up to 6 PAX \ $52</h5>
 </div>
 </div>
-{% endfor %}
 
 <div class="MoviesList">
 <button class="filter">Filter</button>
@@ -210,7 +208,7 @@
         </div>
     </div>
     <div class="w3-container w3-white3">
-        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+        <p><a href=/purchase/4/><button class="purchase" id="0" > Buy Now! </button></a></p>
     </div>
 </div>
 
@@ -232,7 +230,7 @@
         </div>
     </div>
     <div class="w3-container w3-white3">
-        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+        <p><a href='/purchase/1/'><button class="purchase" id="1"> Buy Now! </button></a></p>
     </div>
 </div>
 
@@ -254,7 +252,7 @@
         </div>
     </div>
     <div class="w3-container w3-white3">
-        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+        <p><a href='/purchase/2/'><button class="purchase" id="2"> Buy Now! </button></a></p>
     </div>
 </div>
 
@@ -277,7 +275,7 @@
         </div>
     </div>
     <div class="w3-container w3-white3">
-        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+        <p><a href='/purchase/3/'><button class="purchase" id="3" > Buy Now! </button></a></p>
     </div>
 </div>
 
@@ -300,7 +298,7 @@
         </div>
     </div>
     <div class="w3-container w3-white3">
-        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+        <p><a href='/purchase/5/'><button class="purchase" id="4"> Buy Now! </button></a></p>
     </div>
 </div>
 
@@ -323,7 +321,7 @@
         </div>
     </div>
     <div class="w3-container w3-white3">
-        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+        <p><a href='/purchase/6/'><button class="purchase" id="5"> Buy Now! </button></a></p>
     </div>
 </div>
 
@@ -345,7 +343,7 @@
         </div>
     </div>
     <div class="w3-container w3-white3">
-        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+        <p><a href='/purchase/7/'><button class="purchase" id="6"> Buy Now! </button></a></p>
     </div>
 </div>
 
@@ -367,7 +365,7 @@
         </div>
     </div>
     <div class="w3-container w3-white3">
-        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+        <p><a href='/purchase/8/'><button class="purchase" id="7"> Buy Now! </button></a></p>
     </div>
 </div>
 
@@ -389,7 +387,7 @@
         </div>
     </div>
     <div class="w3-container w3-white3">
-        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+        <p><a href='/purchase/9/'><button class="purchase" id="8"> Buy Now! </button></a></p>
     </div>
 </div>
 
@@ -412,7 +410,7 @@
         </div>
     </div>
     <div class="w3-container w3-white3">
-        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+        <p><a href='/purchase/10/'><button class="purchase" id="9"> Buy Now! </button></a></p>
     </div>
 </div>
 
@@ -446,7 +444,7 @@
         </div>
     </div>
     <div class="w3-container w3-white3">
-        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+        <p><a href='/purchase/11/'><button class="purchase" id="10"> Buy Now! </button></a></p>
     </div>
 </div>
 
@@ -468,7 +466,7 @@
         </div>
     </div>
     <div class="w3-container w3-white3">
-        <p><a href=purchase><button class="purchase"> Buy Now! </button></a></p>
+        <p><a href='/purchase/12/'><button class="purchase" id="11"> Buy Now! </button></a></p>
     </div>
 </div>
 

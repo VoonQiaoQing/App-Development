@@ -1,0 +1,262 @@
+{% block title %}Library Loan System - Create User{% endblock %}
+
+
+<style>
+*{
+margin-top: 20px;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-bottom: 20px;
+}
+
+#image{
+	height: 250px;
+	width: 200px;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	display: inline-block;
+	float: left;
+}
+
+#details{
+margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	display: inline-block;
+	font-size: 19px;}
+*{
+  margin:0;
+  padding:0;
+}
+body{
+  font-family:arial,sans-serif;
+  font-size:100%;
+  margin:1em;
+  background:#666;
+  color:#fff;
+}
+h2,p{
+  font-size:100%;
+  font-weight:normal;
+}
+ul,li{
+  list-style:none;
+}
+ul{
+  overflow:hidden;
+  padding:3em;
+}
+ul li a{
+  text-decoration:none;
+  color:#000;
+  background:#ffc;
+  display:block;
+  height:10em;
+  width:10em;
+  padding:1em;
+  -moz-box-shadow:5px 5px 7px rgba(33,33,33,1);
+  -webkit-box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+  box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+  -moz-transition:-moz-transform .15s linear;
+  -o-transition:-o-transform .15s linear;
+  -webkit-transition:-webkit-transform .15s linear;
+}
+ul li{
+  margin:1em;
+  float:left;
+}
+ul li h2{
+  font-size:140%;
+  font-weight:bold;
+  padding-bottom:10px;
+}
+ul li p{
+  font-family:"Reenie Beanie",arial,sans-serif;
+  font-size:180%;
+}
+ul li a{
+  -webkit-transform: rotate(-6deg);
+  -o-transform: rotate(-6deg);
+  -moz-transform:rotate(-6deg);
+}
+ul li:nth-child(even) a{
+  -o-transform:rotate(4deg);
+  -webkit-transform:rotate(4deg);
+  -moz-transform:rotate(4deg);
+  position:relative;
+  top:5px;
+  background:#cfc;
+}
+ul li:nth-child(3n) a{
+  -o-transform:rotate(-3deg);
+  -webkit-transform:rotate(-3deg);
+  -moz-transform:rotate(-3deg);
+  position:relative;
+  top:-5px;
+  background:#ccf;
+}
+ul li:nth-child(5n) a{
+  -o-transform:rotate(5deg);
+  -webkit-transform:rotate(5deg);
+  -moz-transform:rotate(5deg);
+  position:relative;
+  top:-10px;
+}
+ul li a:hover,ul li a:focus{
+  box-shadow:10px 10px 7px rgba(0,0,0,.7);
+  -moz-box-shadow:10px 10px 7px rgba(0,0,0,.7);
+  -webkit-box-shadow: 10px 10px 7px rgba(0,0,0,.7);
+  -webkit-transform: scale(1.25);
+  -moz-transform: scale(1.25);
+  -o-transform: scale(1.25);
+  position:relative;
+  z-index:5;
+}
+ol{text-align:center;}
+ol li{display:inline;padding-right:1em;}
+ol li a{color:#fff;}
+</style>
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<h1 >Movie Details</h1>
+<div id="display">
+<img src="{{ url_for('static', filename='demonslayer.webp') }}" alt="Norway" id="image">
+
+<div id="details">
+  <h2> Movie:<i>Demon Slayer</i> </h2>
+<h2>Details:.............</h2>
+
+
+<form method="POST" action="">
+  <table>
+    <tr>
+      <th>
+    {{ render_field(form.location) }}
+    </th>
+    <th>
+    <input type="submit" value="Confirm" class="btn btn-primary"/>
+  </th>
+    </tr>
+  </table>
+
+</form>
+    {% for availability in availability_list %}
+    {% if Booked.get_Time()  == availability.get_Time() and Booked.get_Date() == availability.get_Date() %}
+
+  </div>
+</div>
+ <ul>
+    <li>
+      <a href="#">
+        <h2>Ang Mo Kio - Small</h2>
+        <p>Max. No. of rooms: {{ availability.get_AMKsmall() }}</p>
+          <p>No. of room booked:{{ Booked.get_AMKsmall() }} </p>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <h2>Ang Mo Kio - Medium</h2>
+        <p>Max. No. of rooms: {{ availability.get_AMKmedium() }}</p>
+          <p>No. of room booked: {{ Booked.get_AMKmedium() }} </p>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <h2>Ang Mo Kio - Big</h2>
+        <p>Max. No. of rooms: {{ availability.get_AMKbig() }}</p>
+          <p>No. of room booked: {{ Booked.get_AMKbig() }} </p>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <h2>Junction 8 - Small</h2>
+        <p>Max. No. of rooms: {{ availability.get_J8small() }}</p>
+          <p>No. of room booked: {{ Booked.get_J8small() }} </p>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <h2>Junction 8 - Medium</h2>
+        <p>Max. No. of rooms: {{ availability.get_J8medium() }}</p>
+          <p>No. of room booked: {{ Booked.get_J8medium() }}</p>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <h2>Junction 8 - Big</h2>
+        <p>Max. No. of rooms: {{ availability.get_J8big() }}</p>
+          <p>No. of room booked:{{ Booked.get_J8big() }} </p>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <h2>Bedok Point - Small</h2>
+        <p>Max. No. of rooms: {{ availability.get_BPsmall() }}</p>
+          <p>No. of room booked:{{ Booked.get_BPsmall }} </p>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <h2>Bedok Point - Medium</h2>
+        <p>Max. No. of rooms: {{ availability.get_BPmedium() }}</p>
+          <p>No. of room booked:{{ Booked.get_BPmedium }} </p>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <h2>Bedok Point - Big</h2>
+        <p>Max. No. of rooms: {{ availability.get_BPbig() }}</p>
+          <p>No. of room booked: {{ Booked.get_BPbig }}</p>
+      </a>
+    </li>
+     <li>
+      <a href="#">
+        <h2>JCube - Small</h2>
+        <p>Max. No. of rooms: {{ availability.get_JCubesmall() }}</p>
+          <p>No. of room booked:{{ Booked.get_JCubesmall }} </p>
+      </a>
+    </li>
+     <li>
+      <a href="#">
+        <h2>JCube - Medium</h2>
+        <p>Max. No. of rooms: {{ availability.get_JCubemedium() }}</p>
+          <p>No. of room booked: {{ Booked.get_JCubemedium }}</p>
+      </a>
+    </li>
+     <li>
+      <a href="#">
+        <h2>JCube - Big</h2>
+        <p>Max. No. of rooms: {{ availability.get_JCubebig() }}</p>
+          <p>No. of room booked: {{ Booked.get_JCubebig }}</p>
+
+      </a>
+    </li>
+     <li>
+      <a href="#">
+        <h2>Our Tampines Hub - Small</h2>
+        <p>Max. No. of rooms: {{ availability.get_OTHsmall() }}</p>
+          <p>No. of room booked:{{ Booked.get_OTHsmall }} </p>
+      </a>
+    </li>
+     <li>
+      <a href="#">
+        <h2>Our Tampines Hub - Medium</h2>
+        <p>Max. No. of rooms: {{ availability.get_OTHmedium() }}</p>
+          <p>No. of room booked:{{ Booked.get_OTHmedium }} </p>
+      </a>
+    </li>
+      <li>
+      <a href="#">
+        <h2>Our Tampines Hub - Big</h2>
+        <p>Max. No. of rooms: {{ availability.get_OTHbig() }}</p>
+          <p>No. of room booked: {{ Booked.get_OTHbig }}</p>
+      </a>
+    </li>
+  </ul>
+{% endif %}
+{% endfor %}
+{% endblock %}
+

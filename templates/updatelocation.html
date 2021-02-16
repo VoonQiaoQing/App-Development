@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<style>
+body{
+  background:#333333;
+  color:#fff;
+}
+</style>
+<form method="POST" action="">
+<div class="location">
+    <h3 style="color:#FDD017"> Update location</h3>
+    <p>{{ render_field(form.location1) }}</p>
+    <p>{{ render_field(form.location2) }}</p>
+    <p>{{ render_field(form.location3) }}</p>
+    <p>{{ render_field(form.location4) }}</p>
+    <p>{{ render_field(form.location5) }}</p>
+    <input type="submit" value="Submit" class="btn btn-primary"/>
+</div>
+</form>
+{% endblock %}
