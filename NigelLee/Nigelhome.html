@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}AppDevProject - Home{% endblock %}
+
+{% block content %}
+<style>
+*{
+background: black;
+}
+.collapsible {
+  background-color: black;
+  color: gold;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: indigo;
+}
+
+.content {
+  padding: 0 5px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 1.5s ease-out;
+  background-color:black;
+  color:gold;
+}
+</style>
+<style>
+#textInput {
+    border: none;
+    border-bottom: 3px solid aqua;
+    color:black;
+}
+.userText {
+    color: black;
+    font-family: monospace;
+    font-size: 17px;
+    text-align: right;
+    line-height: 30px;
+}
+.userText span {
+    background-color: gold;
+    padding: 10px;
+    border-radius: 2px;
+}
+.botText {
+    color: black;
+    font-family: monospace;
+    font-size: 17px;
+    text-align: left;
+    line-height: 30px;
+}
+.botText span {
+    background-color: gold;
+    padding: 10px;
+    border-radius: 2px;
+}
+</style>
+<head>
+  <style>
+      .img-container {
+        text-align: center;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <span class="img-container"> <!-- Inline parent element -->
+      <img src="user.png" alt="">
+    </span>
+  </body>
+
+<h3 style="color:gold;font-size:45px;text-align:center">Chatbot</h3>
+<a class="img-container" href="/"><img src="static/images/robotimagefaq.jpeg" alt="" width="250" height="170"></a>
+<h3 style="color:gold;font-size:25px;text-align:center">Ask Me Anything</h3>
+
+<p style="color:black;font-size:5px">yyyyyyyyyyyyyyyyy</p>
+<p style="color:black;font-size:5px">yyyyyyyyyyyyyyyyy</p>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="row" style="color:white">
+        <div class="col-sm-6 offset-sm-3">
+            <div id="chatbox" class="border border-success">
+                <p class="botText" style="color:black"><span>Hi! I'm a Chatbot</span></p>
+            </div>
+            <div id="userInput" >
+                <input id="textInput" class="form-control" type="text" name="msg" placeholder="Enter Your Question Here">
+                <input id="buttonInput" class="btn btn-success form-control" type="submit" value="Send">
+            </div>
+        </div>
+    </div>
+
+<script>
+    function getResponse() {
+        let userText = $("#textInput").val();
+        let userHtml = '<p class="userText"><span>' + userText + '</span></p>';
+        $("#textInput").val("");
+        $("#chatbox").append(userHtml);
+        document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+        $.get("/get", { msg: userText }).done(function(data) {
+        var botHtml = '<p class="botText"><span>' + data + '</span></p>';
+        $("#chatbox").append(botHtml);
+        document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+});
+}
+    $("#textInput").keypress(function(e) {
+    //if enter key is pressed
+        if(e.which == 13) {
+            getResponse();
+        }
+    });
+    $("#buttonInput").click(function() {
+        getResponse();
+    });
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</div>
+
+
+</body>
+
+
+
+{% endblock %}
+
