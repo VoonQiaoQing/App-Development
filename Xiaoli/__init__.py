@@ -1,8 +1,7 @@
 import shelve
-from User import User
-from flask import Flask, render_template, request, redirect, url_for, flash, session, g, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_from_directory
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
+from flask_login import LoginManager, UserMixin
 from Forms import LoginForm, RegisterForm
 import imghdr
 import os
@@ -12,12 +11,12 @@ from flask_uploads import configure_uploads, UploadSet, IMAGES
 
 app = Flask(__name__)
 app.secret_key = 'itSaSeCret'
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-photos = UploadSet('photos', IMAGES)
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'profilepic')
-app.config['UPLOAD_EXTENSIONS'] = ['.jfif', '.webp', '.jpg', '.png', '.gif']
-configure_uploads(app, photos)
+# app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+# photos = UploadSet('photos', IMAGES)
+# basedir = os.path.abspath(os.path.dirname(__file__))
+# app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'profilepic')
+# app.config['UPLOAD_EXTENSIONS'] = ['.jfif', '.webp', '.jpg', '.png', '.gif']
+# configure_uploads(app, photos)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -58,6 +57,9 @@ class CuUser(UserMixin):
     def get_password(self):
         return self.password
 
+    def get_id(self):
+        return self.id
+
     def __repr__(self):
         return f'<CuUser: {self.username}>'
 
@@ -66,7 +68,6 @@ class staff:
     id = 0
 
     def __init__(self, username, gender, email, password):
-        staff.id += 1
         self.id = staff.id
         self.username = username
         self.gender = gender
@@ -97,11 +98,15 @@ class staff:
     def get_password(self):
         return self.password
 
+    def get_id(self):
+        return self.id
+
     def __repr__(self):
         return f'<CuUser: {self.username}>'
 
 
 staffacc = staff('Golden123', 'Female', 'golden123@gmail.com', 'goldenmovie')
+int(staffacc.get_id())
 
 
 @login_manager.user_loader
@@ -121,14 +126,13 @@ def home():
     for key in users_dict:
         user = users_dict.get(key)
         users_list.append(user)
-    return render_template('home.html', user=user)
+    return render_template('home.html', user=user, staffacc=staffacc)
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     register_form = RegisterForm(request.form)
     if request.method == 'POST' and register_form.validate():
-        # filename = secure_filename(register_form.profile.data.filename)
         users_dict = {}
         db = shelve.open('users.db', 'c')
         try:
@@ -141,12 +145,7 @@ def register():
             flash('You have already registered with the existing email.', 'Danger')
             return redirect(url_for('login'))
         else:
-            # if filename != '':
-            # file_ext = os.path.splitext(filename)[1]
-            # if file_ext not in app.config['UPLOAD_EXTENSIONS'] or file_ext != validate_image(register_form.small_roomimage1.data.stream):
-            # return "Invalid Image",400
-            # else:
-            # register_form.profile.data.save(os.path.join(basedir, 'profilepic', filename))
+
             hashed_password = generate_password_hash(register_form.password.data, method='sha256')
             user = CuUser(
                 register_form.username.data,
@@ -163,18 +162,9 @@ def register():
     return render_template('register.html', form=register_form)
 
 
-@app.route('/profile/<int:id>')
+@app.route('/profile/<int:id>', methods=['GET', 'POST'])
 def profile(id):
     update_form = RegisterForm(request.form)
-    users_dict = {}
-    db = shelve.open('users.db', 'r')
-    users_dict = db['Users']
-    db.close()
-
-    users_list = []
-    for key in users_dict:
-        user = users_dict.get(key)
-        users_list.append(user)
     users_dict = {}
     db = shelve.open('users.db', 'r')
     users_dict = db['Users']
@@ -184,7 +174,7 @@ def profile(id):
     update_form.username.data = user.username
     update_form.email.data = user.email
     update_form.gender.data = user.gender
-    # update_form.profile.data = user.profile
+
     return render_template('profile.html', form=update_form, user=user)
 
 
@@ -198,14 +188,12 @@ def login():
         db.close()
         users_list = []
         if login_form.email.data == staffacc.email:
-            password = generate_password_hash(login_form.password.data, method='sha256')
-            check_password_hash(staffacc.password, password)
-            session['id'] = True
-            session['login'] = staffacc.id
-            session['loggedIn'] = staffacc.username
-            return redirect(url_for('home'))
+            if staffacc.password == login_form.password.data:
+                session['id'] = True
+                session['login'] = staffacc.id
+                session['loggedIn'] = staffacc.username
+                return redirect(url_for('home'))
         else:
-
             for id in users_dict:
                 user = users_dict.get(id)
                 users_list.append(user)
@@ -265,20 +253,10 @@ def too_large(e):
 @app.route('/update/<int:id>/', methods=['GET', 'POST'])
 def update(id):
     update_form = RegisterForm(request.form)
-    users_dict = {}
-    db = shelve.open('users.db', 'r')
-    users_dict = db['Users']
-    db.close()
-
-    users_list = []
-    for key in users_dict:
-        user = users_dict.get(key)
-        users_list.append(user)
     if request.method == 'POST':
         users_dict = {}
         db = shelve.open('users.db', 'w')
         users_dict = db['Users']
-
         user = users_dict.get(id)
         user.username = update_form.username.data
         user.email = update_form.email.data
@@ -286,6 +264,7 @@ def update(id):
 
         db['Users'] = users_dict
         db.close()
+
         session['loggedIn'] = user.username
         return redirect(url_for('home'))
 
@@ -300,11 +279,12 @@ def update(id):
         update_form.email.data = user.email
         update_form.gender.data = user.gender
 
-        return render_template('update.html', form=update_form, user=user)
+        return render_template('update.html', form=update_form, user=user, staffacc=staffacc)
 
 
 @app.route('/delete/<int:id>', methods=['POST'])
 def delete(id):
+
     users_dict = {}
     db = shelve.open('users.db', 'w')
     users_dict = db['Users']
