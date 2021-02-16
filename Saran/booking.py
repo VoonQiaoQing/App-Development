@@ -169,3 +169,12 @@ class Promocode:
         return self.__promocode
     def get_roomtype(self):
         return self.__roomtype
+class Minus:
+    def __init__(self,minus):
+        self.__minus = minus
+
+
+    def set_minus(self,minus):
+        self.__minus = minus
+    def get_minus(self):
+        return self.__minus -1
