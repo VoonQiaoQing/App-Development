@@ -67,7 +67,7 @@ padding-top:10px;
               <div class="col-lg-3 order-lg-2">
                 <div class="card-profile-image">
                   <a href="#">
-                    <img style="width: 50px; border-radius:50%;padding-bottom: 25px;" src="{{ url_for('send_image', filename= user.get_profile()) }}" alt="Avatar" class="w3-hover-opacity">
+                    <img style="width: 200px; border-radius:50%;padding-bottom: 25px;" src="{{ url_for('send_image', filename= user.get_profile()) }}" alt="Avatar" class="w3-hover-opacity">
                   </a>
                 </div>
               </div>
@@ -135,11 +135,6 @@ padding-top:10px;
                       </div>
                     </div>
                   </div>
-                    <div class="delete">
-                      <form action="{{url_for('delete', id=user.get_id())}}" method="POST">
-                       <input type="submit" value="Delete Account" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{user.get_username()}}?');">
-                      </form>
-                    </div>
                   </div>
               </form>
                 </div>
