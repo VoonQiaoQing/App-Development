@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Home{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+* {
+  background-color: black;
+  color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+{% extends "base.html" %}
+
+{% block content %}
+{% if 'login' in session %}
+<div class="alert alert-success alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ session['loggedIn'] }} has login.
+</div>
+{% endif %}
+<h1 class="display-4">Home</h1>
+<p>Hello world!</p>
+<img src="{{ url_for('static', filename='newpicforhomepage.png') }}" alt="Norway" class="w3-hover-opacity">
+{% endblock %}
+
+</body>
+
+
+
